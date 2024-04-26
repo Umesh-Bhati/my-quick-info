@@ -66,6 +66,13 @@
   }
 }
 
+h1 {
+  font-size: 17.55px;
+  font-weight: 600;
+  color: "#181C32";
+}
+
+
 @layer base {
   * {
     @apply border-border;

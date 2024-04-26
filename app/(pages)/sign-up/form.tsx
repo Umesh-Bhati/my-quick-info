@@ -1,6 +1,5 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,9 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const formSchema = z.object({
+  name: z.string(),
   email: z.string().email({
     message: "Email must be a valid email address.",
   }),
@@ -26,11 +26,12 @@ const formSchema = z.object({
   }),
 });
 
-export function LoginForm() {
+export default function SignUpForm() {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -38,21 +39,26 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await signIn("credentials", {
-        ...values,
-        redirect: false,
+      const serverResponse = await fetch("/api/auth/create-user", {
+        method: "POST",
+        body: JSON.stringify(values),
       });
 
-      console.log("responseSIGNUP ", response)
-      if (response?.error)
-        return form.setError("root", {
-          type: "custome",
-          message: "Email or Password is incorrect",
-        });
-      router.push("/");
-      router.refresh();
+      const response = await serverResponse.json();
+
+      response?.code === 409
+        ? form.setError("root", {
+            type: "custome",
+            message: response?.message,
+          })
+        : response?.code === 201
+        ? (router.push("/"), router.refresh())
+        : form.setError("root", {
+            type: "custome",
+            message: "please check your valid input values and try again",
+          });
     } catch (error) {
-      console.error("errowhielloginsubmit ", error);
+      console.error("signup formerr ", error);
     }
   }
 
@@ -65,7 +71,7 @@ export function LoginForm() {
         >
           <div className="flex flex-col gap-2 ">
             <h4 className="scroll-m-20 text-center text-xl font-semibold tracking-tight">
-              Sign In
+              Sign Up
             </h4>
             <p className="text-sm text-center text-muted-foreground">
               Welcome!
@@ -76,6 +82,18 @@ export function LoginForm() {
               {form.formState.errors.root.message}
             </p>
           )}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -112,7 +130,7 @@ export function LoginForm() {
           />
 
           <Button type="submit" size="lg">
-            Sign in
+            Sign up
           </Button>
         </form>
       </Form>

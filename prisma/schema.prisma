@@ -1,0 +1,405 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model bc_depts {
+  id                   Int    @id @default(autoincrement()) @db.UnsignedInt
+  odataEtag            String?   @db.LongText
+  Dimension_Code       String?   @db.LongText
+  Code                 String?   @db.LongText
+  Name                 String?   @db.LongText
+  Dimension_Value_Type String?   @db.LongText
+  Totaling             String?   @db.LongText
+  Blocked              String?   @db.LongText
+  Consolidation_Code   String?   @db.LongText
+  created_at           DateTime? @db.Timestamp(0)
+  updated_at           DateTime? @db.Timestamp(0)
+}
+
+model bc_funds {
+  id                Int    @id @default(autoincrement()) @db.UnsignedInt
+  odataEtag         String?   @db.LongText
+  No                String?   @db.LongText
+  Name              String?   @db.LongText
+  Blocked           String?   @db.LongText
+  Fund_Class_Code   String?   @db.LongText
+  Fund_Type_Code    String?   @db.LongText
+  Map_to_IC_Fund_No String?   @db.LongText
+  Report_to_State   String?   @db.LongText
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+}
+
+model bc_general_ledger_entries {
+  id                           Int    @id @default(autoincrement()) @db.UnsignedInt
+  odataEtag                    String?   @db.LongText
+  Entry_No                     String?   @db.VarChar(255)
+  Posting_Date                 DateTime? @db.Date
+  Document_Type                String?   @db.LongText
+  Entry_Type_NVG               String?   @db.LongText
+  Account_String_NVG           String?   @db.LongText
+  ASN_No_NVG                   String?   @db.LongText
+  Document_No                  String?   @db.LongText
+  G_L_Account_No               String?   @db.LongText
+  G_L_Account_Name             String?   @db.LongText
+  Fund_No_NVG                  String?   @db.LongText
+  Description                  String?   @db.LongText
+  External_Document_No         String?   @db.LongText
+  Amount                       String?   @db.LongText
+  Job_No                       String?   @db.LongText
+  Global_Dimension_1_Code      String?   @db.LongText
+  Global_Dimension_2_Code      String?   @db.LongText
+  Global_Dimension_3_Code_NVG  String?   @db.LongText
+  Global_Dimension_4_Code_NVG  String?   @db.LongText
+  Global_Dimension_5_Code_NVG  String?   @db.LongText
+  Global_Dimension_6_Code_NVG  String?   @db.LongText
+  Global_Dimension_7_Code_NVG  String?   @db.LongText
+  Global_Dimension_8_Code_NVG  String?   @db.LongText
+  IC_Partner_Code              String?   @db.LongText
+  Transaction_Type_NVG         String?   @db.LongText
+  Purchase_Order_No_NVG        String?   @db.LongText
+  Purchase_Requisition_No_NVG  String?   @db.LongText
+  Business_Unit_Code_NVG       String?   @db.LongText
+  Source_Type_NVG              String?   @db.LongText
+  Source_No_NVG                String?   @db.LongText
+  SourceNameNVG                String?   @db.LongText
+  CommentNVG                   String?   @db.LongText
+  Purchase_Contract_Type_NVG   String?   @db.LongText
+  HUB_Category_Code_NVG        String?   @db.LongText
+  NIGP_Code_NVG                String?   @db.LongText
+  Purchase_Line_Status_NVG     String?   @db.LongText
+  ClosedByDocNVG               String?   @db.LongText
+  ClosedAtDateNVG              String?   @db.LongText
+  Gen_Posting_Type             String?   @db.LongText
+  Gen_Bus_Posting_Group        String?   @db.LongText
+  Gen_Prod_Posting_Group       String?   @db.LongText
+  Quantity                     String?   @db.LongText
+  Debit_Amount                 String?   @db.LongText
+  Credit_Amount                String?   @db.LongText
+  Additional_Currency_Amount   String?   @db.LongText
+  Original_Currency_Code_NVG   String?   @db.LongText
+  Original_Currency_Amount_NVG String?   @db.LongText
+  VAT_Amount                   String?   @db.LongText
+  Fund_Class_Code_NVG          String?   @db.LongText
+  Ctl_Fund_No_NVG              String?   @db.LongText
+  Bal_Account_Type             String?   @db.LongText
+  Bal_Account_No               String?   @db.LongText
+  VAT_Reporting_Date           DateTime? @db.Date
+  User_ID                      String?   @db.LongText
+  Source_Code                  String?   @db.LongText
+  User_ID_NVG                  String?   @db.LongText
+  Tax_Area_Code_NVG            String?   @db.LongText
+  Tax_Liable_NVG               String?   @db.LongText
+  Tax_Group_Code_NVG           String?   @db.LongText
+  Use_Tax_NVG                  String?   @db.LongText
+  Reason_Code                  String?   @db.LongText
+  Budget_Plan_No_NVG           String?   @db.LongText
+  Reversed                     String?   @db.LongText
+  Reversed_by_Entry_No         String?   @db.LongText
+  Reversed_Entry_No            String?   @db.LongText
+  FA_Entry_Type                String?   @db.LongText
+  FA_Entry_No                  String?   @db.LongText
+  Award_Class_Code_NVG         String?   @db.LongText
+  Award_Type_Code_NVG          String?   @db.LongText
+  G_L_Register_No_NVG          String?   @db.LongText
+  Creation_Date_NVG            DateTime? @db.Date
+  Inter_Company_Name_NVG       String?   @db.LongText
+  FC_Entry_No_NVG              String?   @db.LongText
+  FC_UDF_1_NVG                 String?   @db.LongText
+  FC_UDF_2_NVG                 String?   @db.LongText
+  FC_UDF_3_NVG                 String?   @db.LongText
+  FC_UDF_4_NVG                 String?   @db.LongText
+  FC_UDF_5_NVG                 String?   @db.LongText
+  Dimension_Set_ID             String?   @db.LongText
+  Shortcut_Dimension_3_Code    String?   @db.LongText
+  Shortcut_Dimension_4_Code    String?   @db.LongText
+  Shortcut_Dimension_5_Code    String?   @db.LongText
+  Shortcut_Dimension_6_Code    String?   @db.LongText
+  Shortcut_Dimension_7_Code    String?   @db.LongText
+  Shortcut_Dimension_8_Code    String?   @db.LongText
+  created_at                   DateTime? @db.Timestamp(0)
+  updated_at                   DateTime? @db.Timestamp(0)
+  fiscal_year                  Int?
+}
+
+model bc_general_ledger_entries_nvgs {
+  id                           Int    @id @default(autoincrement()) @db.UnsignedInt
+  odataEtag                    String?   @db.LongText
+  Entry_No                     String?   @db.VarChar(255)
+  Posting_Date                 DateTime? @db.Date
+  Document_Type                String?   @db.LongText
+  Entry_Type_NVG               String?   @db.LongText
+  Account_String_NVG           String?   @db.LongText
+  ASN_No_NVG                   String?   @db.LongText
+  Document_No                  String?   @db.LongText
+  G_L_Account_No               String?   @db.LongText
+  G_L_Account_Name             String?   @db.LongText
+  Fund_No_NVG                  String?   @db.LongText
+  RestrictAccess_CAH           String?   @db.LongText
+  Description                  String?   @db.LongText
+  Job_No                       String?   @db.LongText
+  Global_Dimension_1_Code      String?   @db.LongText
+  Global_Dimension_2_Code      String?   @db.LongText
+  IC_Partner_Code              String?   @db.LongText
+  Transaction_Type_NVG         String?   @db.LongText
+  Purchase_Order_No_NVG        String?   @db.LongText
+  Purchase_Requisition_No_NVG  String?   @db.LongText
+  Business_Unit_Code_NVG       String?   @db.LongText
+  Source_Type_NVG              String?   @db.LongText
+  Source_No_NVG                String?   @db.LongText
+  Source_Name                  String?   @db.LongText
+  SourceNameNVG                String?   @db.LongText
+  CommentNVG                   String?   @db.LongText
+  Purchase_Contract_Type_NVG   String?   @db.LongText
+  HUB_Category_Code_NVG        String?   @db.LongText
+  NIGP_Code_NVG                String?   @db.LongText
+  Purchase_Line_Status_NVG     String?   @db.LongText
+  ClosedByDocNVG               String?   @db.LongText
+  ClosedAtDateNVG              String?   @db.LongText
+  Gen_Posting_Type             String?   @db.LongText
+  Gen_Bus_Posting_Group        String?   @db.LongText
+  Gen_Prod_Posting_Group       String?   @db.LongText
+  Quantity                     String?   @db.LongText
+  Amount                       String?   @db.LongText
+  Debit_Amount                 String?   @db.LongText
+  Credit_Amount                String?   @db.LongText
+  Additional_Currency_Amount   String?   @db.LongText
+  Original_Currency_Code_NVG   String?   @db.LongText
+  Original_Currency_Amount_NVG String?   @db.LongText
+  VAT_Amount                   String?   @db.LongText
+  Fund_Class_Code_NVG          String?   @db.LongText
+  Ctl_Fund_No_NVG              String?   @db.LongText
+  Bal_Account_Type             String?   @db.LongText
+  Bal_Account_No               String?   @db.LongText
+  User_ID                      String?   @db.LongText
+  Source_Code                  String?   @db.LongText
+  User_ID_NVG                  String?   @db.LongText
+  Tax_Area_Code_NVG            String?   @db.LongText
+  Tax_Liable_NVG               String?   @db.LongText
+  Tax_Group_Code_NVG           String?   @db.LongText
+  Use_Tax_NVG                  String?   @db.LongText
+  Reason_Code                  String?   @db.LongText
+  Budget_Plan_No_NVG           String?   @db.LongText
+  Reversed                     String?   @db.LongText
+  Reversed_by_Entry_No         String?   @db.LongText
+  Reversed_Entry_No            String?   @db.LongText
+  FA_Entry_Type                String?   @db.LongText
+  FA_Entry_No                  String?   @db.LongText
+  Award_Class_Code_NVG         String?   @db.LongText
+  Award_Type_Code_NVG          String?   @db.LongText
+  G_L_Register_No_NVG          String?   @db.LongText
+  Creation_Date_NVG            DateTime? @db.Date
+  Inter_Company_Name_NVG       String?   @db.LongText
+  FC_Entry_No_NVG              String?   @db.LongText
+  FC_UDF_1_NVG                 String?   @db.LongText
+  FC_UDF_2_NVG                 String?   @db.LongText
+  FC_UDF_3_NVG                 String?   @db.LongText
+  FC_UDF_4_NVG                 String?   @db.LongText
+  FC_UDF_5_NVG                 String?   @db.LongText
+  Your_Reference_FAC           String?   @db.LongText
+  Dimension_Set_ID             String?   @db.LongText
+  External_Document_No         String?   @db.LongText
+  Shortcut_Dimension_3_Code    String?   @db.LongText
+  Shortcut_Dimension_4_Code    String?   @db.LongText
+  Shortcut_Dimension_5_Code    String?   @db.LongText
+  Shortcut_Dimension_6_Code    String?   @db.LongText
+  Shortcut_Dimension_7_Code    String?   @db.LongText
+  Shortcut_Dimension_8_Code    String?   @db.LongText
+  Global_Dimension_3_Code_NVG  String?   @db.LongText
+  Global_Dimension_4_Code_NVG  String?   @db.LongText
+  Global_Dimension_5_Code_NVG  String?   @db.LongText
+  Global_Dimension_6_Code_NVG  String?   @db.LongText
+  Global_Dimension_7_Code_NVG  String?   @db.LongText
+  Global_Dimension_8_Code_NVG  String?   @db.LongText
+  created_at                   DateTime? @db.Timestamp(0)
+  updated_at                   DateTime? @db.Timestamp(0)
+  fiscal_year                  Int?
+}
+
+model bc_lastsyncs {
+  id           Int    @id @default(autoincrement()) @db.UnsignedInt
+  bc_table     String?   @db.LongText
+  params       String?   @db.LongText
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+  count_result String?   @db.Text
+}
+
+model bc_vendor_ledger_entries {
+  id                           Int    @id @default(autoincrement()) @db.UnsignedInt
+  odataEtag                    String?   @db.LongText
+  Entry_No                     String?   @db.LongText
+  Posting_Date                 DateTime? @db.Date
+  Document_Date_NVG            DateTime? @db.Date
+  Document_Type                String?   @db.LongText
+  Document_No                  String?   @db.LongText
+  External_Document_No         String?   @db.LongText
+  Purchase_Order_No_NVG        String?   @db.LongText
+  PurchaseRequisitionNo_NVG    String?   @db.LongText
+  Vendor_No                    String?   @db.LongText
+  Vendor_Name                  String?   @db.LongText
+  Remit_to_Address_Code_NVG    String?   @db.LongText
+  Vendor_Name_2_NVG            String?   @db.LongText
+  Message_to_Recipient         String?   @db.LongText
+  Description                  String?   @db.LongText
+  Global_Dimension_1_Code      String?   @db.LongText
+  Global_Dimension_2_Code      String?   @db.LongText
+  Vendor_Posting_Group         String?   @db.LongText
+  IC_Partner_Code              String?   @db.LongText
+  Original_Amount              String?   @db.LongText
+  Purchaser_Code               String?   @db.LongText
+  Payment_Method_Code          String?   @db.LongText
+  Open                         String?   @db.LongText
+  Bal_Account_Type             String?   @db.LongText
+  Payment_Reference            String?   @db.LongText
+  Creditor_No                  String?   @db.LongText
+  Original_Amt_LCY             String?   @db.LongText
+  Original_Currency_Factor_NVG String?   @db.LongText
+  Amount                       String?   @db.LongText
+  Amount_LCY                   String?   @db.LongText
+  Debit_Amount                 String?   @db.LongText
+  Debit_Amount_LCY             String?   @db.LongText
+  Credit_Amount                String?   @db.LongText
+  Credit_Amount_LCY            String?   @db.LongText
+  Remaining_Amount             String?   @db.LongText
+  Remaining_Amt_LCY            String?   @db.LongText
+  Currency_Code                String?   @db.LongText
+  Bal_Account_No               String?   @db.LongText
+  Due_Date                     DateTime? @db.Date
+  Employee_No_NVG              String?   @db.LongText
+  Ctl_Fund_No_NVG              String?   @db.LongText
+  Our_Account_No_NVG           String?   @db.LongText
+  Pmt_Discount_Date            DateTime? @db.Date
+  Pmt_Disc_Tolerance_Date      DateTime? @db.Date
+  Original_Pmt_Disc_Possible   String?   @db.LongText
+  Remaining_Pmt_Disc_Possible  String?   @db.LongText
+  Max_Payment_Tolerance        String?   @db.LongText
+  On_Hold                      String?   @db.LongText
+  User_ID                      String?   @db.LongText
+  Source_Code                  String?   @db.LongText
+  Reason_Code                  String?   @db.LongText
+  Reversed                     String?   @db.LongText
+  Reversed_by_Entry_No         String?   @db.LongText
+  Reversed_Entry_No            String?   @db.LongText
+  IRS_1099_Code                String?   @db.LongText
+  Closed_by_Document_No_NVG    String?   @db.LongText
+  Closed_by_Entry_No_NVG       String?   @db.LongText
+  Closed_at_Date_NVG           DateTime? @db.Date
+  Closed_by_Amount_NVG         String?   @db.LongText
+  IRS_1099_Amount              String?   @db.LongText
+  Your_Reference_FAC           String?   @db.LongText
+  Purchase_Contract_Type_NVG   String?   @db.LongText
+  HUB_Category_Code_NVG        String?   @db.LongText
+  Separate_Check_NVG           String?   @db.LongText
+  Exported_to_Payment_File     String?   @db.LongText
+  Dimension_Set_ID             String?   @db.LongText
+  RecipientBankAcc             String?   @db.LongText
+  Shortcut_Dimension_3_Code    String?   @db.LongText
+  Shortcut_Dimension_4_Code    String?   @db.LongText
+  Shortcut_Dimension_5_Code    String?   @db.LongText
+  Shortcut_Dimension_6_Code    String?   @db.LongText
+  Shortcut_Dimension_7_Code    String?   @db.LongText
+  Shortcut_Dimension_8_Code    String?   @db.LongText
+  Remit_to_Code                String?   @db.LongText
+  Date_Filter                  String?   @db.LongText
+  created_at                   DateTime? @db.Timestamp(0)
+  updated_at                   DateTime? @db.Timestamp(0)
+}
+
+model failed_jobs {
+  id         Int   @id @default(autoincrement()) @db.UnsignedInt
+  uuid       String   @unique(map: "failed_jobs_uuid_unique") @db.VarChar(255)
+  connection String   @db.Text
+  queue      String   @db.Text
+  payload    String   @db.LongText
+  exception  String   @db.LongText
+  failed_at  DateTime @default(now()) @db.Timestamp(0)
+}
+
+model jobs {
+  id           Int @id @default(autoincrement()) @db.UnsignedInt
+  queue        String @db.VarChar(255)
+  payload      String @db.LongText
+  attempts     Int    @db.UnsignedTinyInt
+  reserved_at  Int?   @db.UnsignedInt
+  available_at Int    @db.UnsignedInt
+  created_at   Int    @db.UnsignedInt
+
+  @@index([queue], map: "jobs_queue_index")
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model password_resets {
+  email      String    @db.VarChar(255)
+  token      String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+
+  @@index([email], map: "password_resets_email_index")
+  @@ignore
+}
+
+model permissions {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  userid     Int    @db.UnsignedInt
+  api_url    String    @db.LongText
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model personal_access_tokens {
+  id             Int    @id @default(autoincrement()) @db.UnsignedInt
+  tokenable_type String    @db.VarChar(255)
+  tokenable_id   Int    @db.UnsignedInt
+  name           String    @db.VarChar(255)
+  token          String    @unique(map: "personal_access_tokens_token_unique") @db.VarChar(64)
+  abilities      String?   @db.Text
+  last_used_at   DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+
+  @@index([tokenable_type, tokenable_id], map: "personal_access_tokens_tokenable_type_tokenable_id_index")
+}
+
+model tkn_oauth_bcs {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  request    String    @db.LongText
+  response   String    @db.LongText
+  token      String    @db.LongText
+  active     Boolean   @default(true)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model user_scopes {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  user_id    Int
+  fund_no    String    @db.LongText
+  dept_rel   String    @db.LongText
+  made_by    Int
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model users {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  name       String    @db.VarChar(255)
+  last_name  String    @db.VarChar(255)
+  email      String    @unique(map: "users_email_unique") @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  is_admin   Boolean?  @default(false)
+  active     Boolean   @default(true)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  img_path   String?   @db.LongText
+  }
