@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -35,15 +37,16 @@ export function LoginForm() {
       password: "",
     },
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setIsLoading(true);
       const response = await signIn("credentials", {
         ...values,
         redirect: false,
       });
 
-      console.log("responseSIGNUP ", response)
       if (response?.error)
         return form.setError("root", {
           type: "custome",
@@ -53,11 +56,13 @@ export function LoginForm() {
       router.refresh();
     } catch (error) {
       console.error("errowhielloginsubmit ", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <div className="flex  p-10 h-full w-full justify-center items-center ">
+    <div className="flex flex-1 p-10 h-[90%] flex-grow w-full justify-center items-center ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -101,17 +106,17 @@ export function LoginForm() {
                   />
                 </FormControl>
                 <FormMessage />
-                <Link
-                  href="#"
-                  className="text-right self-end transition-all ease-linear duration-250 text-sm font-medium text-[#0e4884] hover:text-[rgb(0, 158, 247)] "
-                >
-                  Forgot Password ?
-                </Link>
               </FormItem>
             )}
           />
-
+          <Link
+            href="/forget-password"
+            className="text-right self-end transition-all ease-linear duration-250 text-sm font-medium text-[#0e4884] hover:text-[rgb(0, 158, 247)] "
+          >
+            Forgot Password ?
+          </Link>
           <Button type="submit" size="lg">
+            {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
             Sign in
           </Button>
         </form>

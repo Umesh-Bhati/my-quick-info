@@ -18,7 +18,6 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
-      
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{
@@ -66,7 +65,6 @@ function Calendar({
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
       }}
       {...props}
-     fromDate={new Date("2023-04-05")}
     />
   );
 }

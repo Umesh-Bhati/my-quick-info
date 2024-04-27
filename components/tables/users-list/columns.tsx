@@ -2,25 +2,27 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
+import { PenSquareIcon } from "lucide-react";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 export type User = {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  last_name: string;
   email: string;
-  isAdmin: boolean;
+  is_admin: boolean;
   active: boolean;
   editBtn: ReactNode;
 };
 
 export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "firstName",
+    accessorKey: "name",
     header: "First Name",
   },
   {
-    accessorKey: "lastName",
+    accessorKey: "last_name",
     header: "Last Name",
   },
   {
@@ -28,11 +30,20 @@ export const columns: ColumnDef<User>[] = [
     header: "Email",
   },
   {
-    accessorKey: "isAdmin",
-    header: "Is admin",
+    accessorKey: "is_admin",
+    header: "Is Admin",
+    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
   },
   {
-    accessorKey: "editBtn",
-    cell: () => <Button>Edit</Button>,
+    accessorKey: "Edit",
+    cell: ({ row: { original } }) => {
+      return (
+        <Button variant={"outline"} size={"icon"}>
+          <Link href={`/profile?email=${original?.email}`}>
+            <PenSquareIcon className="w-6 h-6 text-foreground/60" />
+          </Link>
+        </Button>
+      );
+    },
   },
 ];

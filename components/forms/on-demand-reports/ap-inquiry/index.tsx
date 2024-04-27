@@ -34,7 +34,7 @@ export interface IBugdet {
   departmentList: any[];
 }
 
-export default function GlForm({
+export default function ApInquiryForm({
   form,
   isLoading,
   fundList,
@@ -94,11 +94,8 @@ export default function GlForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="bg-white">
-                      <SelectValue
-                        className="bg-white"
-                        placeholder="Select Fund Type"
-                      />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Fund Type" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -125,11 +122,8 @@ export default function GlForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="bg-white">
-                      <SelectValue
-                        className="bg-white"
-                        placeholder="Select Fund"
-                      />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Fund" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -170,11 +164,8 @@ export default function GlForm({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="bg-white">
-                      <SelectValue
-                        className="bg-white"
-                        placeholder="Select Department Code"
-                      />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Department Code" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

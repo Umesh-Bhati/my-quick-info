@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import {
   Table,
@@ -15,32 +16,66 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Skeleton } from "./skeleton";
+import { useCallback, useState } from "react";
 
-interface DataTableProps<TData, TValue> {
+export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  hasNextPage,
+  fetchNextPage,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+  const { rows } = table.getRowModel();
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+
+  const containerRef = useBottomScrollListener(
+    useCallback(async () => {
+      try {
+        if (hasNextPage) {
+          setIsFetchingNextPage(true);
+          await fetchNextPage?.();
+        }
+      } catch (error) {
+        console.error("error ", error);
+      } finally {
+        setIsFetchingNextPage(false);
+      }
+    }, [hasNextPage])
+  );
 
   return (
-    <div className="rounded-md min-h-96 border">
+    <div
+      style={{
+        position: "relative",
+        overflow: "auto",
+        maxHeight: "900px",
+        minHeight: data.length > 0 ? "fit" : "700px",
+        scrollbarWidth: "none",
+      }}
+      className="rounded-md  border bg-accent/30  "
+      ref={containerRef}
+    >
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow className="bg-muted/100" key={headerGroup.id}>
+            <TableRow className="bg-muted" key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
-                    className="text-sm text-center text-[#181C32] font-bold"
+                    className="text-sm text-center  font-bold"
                     key={header.id}
                   >
                     {header.isPlaceholder
@@ -56,28 +91,37 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          {rows.map((row, index) => {
+            return (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                {row.getVisibleCells().map((cell, index) => (
-                  <TableCell className="text-center border-r  bg-white" key={cell.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell className="text-center border-r " key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-96 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
+            );
+          })}
+          {isFetchingNextPage &&
+            new Array(25).fill(null).map((_, rowKey) => (
+              <TableRow key={rowKey}>
+                {table.getHeaderGroups()[0].headers.map((_, key) => (
+                  <TableCell className="text-center border-r" key={key}>
+                    <Skeleton key={key} className="h-8" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
+      {data.length === 0 && (
+        <h1 className="text-sm text-center mt-72 align-center text-[#181C32]">
+          No results
+        </h1>
+      )}
     </div>
   );
 }

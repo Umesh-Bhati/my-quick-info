@@ -1,10 +1,10 @@
 "use client"
-import { Budget } from "@/app/(sections)/budget-table/columns";
-import { getDepartments, getFunds } from "@/components/forms/action";
-import { getGlDetailsTable } from "@/components/forms/on-demand-reports/GlForm/action";
+import { getDepartments, getFunds } from "@/components/forms/on-demand-reports/budget-vs-actual/action";
+import { fetchNextPageData, getGlDetailsTable } from "@/components/forms/on-demand-reports/gl-details/action";
 import { GlDetail } from "@/components/tables/gl-details/columns";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,8 +17,14 @@ const formSchema = z.object({
     fundType: z.string(),
 });
 
+type glTableData = {
+    "@odata.count": number;
+    "@odata.nextLink": number;
+    value: GlDetail[]
+}
+
 export default function useGlDetailTable() {
-    const [glTableData, setGlTableData] = useState<GlDetail[]>([])
+    const [glTableData, setGlTableData] = useState<glTableData>()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -88,16 +94,30 @@ export default function useGlDetailTable() {
             }));
         }
     }
+    const hasNextPage = (glTableData?.value?.length || 0) < (glTableData?.["@odata.count"] || 0)
+    const fetchNextPage = async () => {
+        try {
+            if (hasNextPage && glTableData?.["@odata.nextLink"]) {
+                const data = await fetchNextPageData(glTableData["@odata.nextLink"])
+                console.log("NextFetchData... ", data)
+                setGlTableData(old => ({ ...data, value: [...old.value, ...data?.value], }))
+            }
+        } catch (error) {
+            console.error("errNextpage ", error);
+        }
+    }
 
     return {
-        glTableData,
+        glTableData: glTableData?.value,
         isLoading,
         onSubmit,
         fundList,
         departmentList,
         form,
         fundTypeOnChange,
-        fundSelectOnChange
+        fundSelectOnChange,
+        hasNextPage,
+        fetchNextPage
     }
 
 }

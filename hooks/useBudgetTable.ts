@@ -1,6 +1,6 @@
 "use client"
 import { Budget } from "@/app/(sections)/budget-table/columns";
-import { getBudgetTable, getDepartments, getFunds } from "@/components/forms/action";
+import { getBudgetTable, getDepartments, getFunds } from "@/components/forms/on-demand-reports/budget-vs-actual/action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { useState } from "react";

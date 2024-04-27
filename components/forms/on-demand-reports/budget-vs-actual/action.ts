@@ -1,13 +1,16 @@
 "use server"
 
+import { prisma } from "@/app/api/db";
 import { getOAuthToken } from "@/app/api/utils/getOAuthToken";
 import axios from "axios";
-import { format, getYear, getMonth, startOfMonth, endOfDay } from 'date-fns';
+import { format, startOfMonth, endOfDay } from 'date-fns';
+import { getServerSession } from "next-auth";
 
 
 const axiosInterceptorInstance = axios.create({
     baseURL: "https://api.businesscentral.dynamics.com/v2.0/9a3b820c-c73a-42e3-bb1f-e6029580103b/Production/ODataV4/Company('Cahuilla')/", // Replace with your API base URL
 });
+
 
 axiosInterceptorInstance.interceptors.request.use(
     async (config) => {
@@ -24,6 +27,9 @@ axiosInterceptorInstance.interceptors.request.use(
 );
 
 
+
+
+
 interface IDepartments {
     fundNo: string;
     startDate: string
@@ -32,8 +38,10 @@ interface IDepartments {
 
 
 
+
 export const getDepartments = async ({ fundNo, startDate, endDate }: IDepartments) => {
     try {
+
         const response = await axiosInterceptorInstance.get(
             `General_Ledger_Entries_Excel?$filter=Posting_Date ge ${startDate} and Posting_Date le ${endDate} and Fund_No_NVG eq \'${fundNo}\'`,
         );
@@ -67,7 +75,6 @@ export const getFunds = async (fundType: "General" | "Fedral") => {
         return data?.value
     } catch (error) {
         console.error("getFundErr ", error);
-
     }
 }
 

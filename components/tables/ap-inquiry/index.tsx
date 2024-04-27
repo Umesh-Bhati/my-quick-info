@@ -2,7 +2,7 @@
 import { GlDetail, columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 
-export default function GlDetailsTable({
+export default function ApInquiryTable({
   data,
   ...rest
 }: {
