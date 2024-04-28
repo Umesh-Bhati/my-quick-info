@@ -19,7 +19,7 @@ export default async function RootLayout({ children }) {
   const data = await getServerSession();
   const email = data?.user?.email || "";
   const { is_admin = false } =
-    (await prisma.users.findUnique({ where: { email } })) || {};
+    (await prisma?.users?.findUnique({ where: { email } })) || {};
   return (
     <html lang="en" suppressHydrationWarning>
       <head />

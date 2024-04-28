@@ -1,7 +1,4 @@
 "use client";
-import { FormProps } from "react-hook-form";
-
-import { ReloadIcon } from "@radix-ui/react-icons";
 import {
   Form,
   FormControl,
@@ -9,40 +6,38 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { DatePicker } from "@/components/DatePicker";
+} from "../../../ui/form";
+import { Button } from "../../../ui/button";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+} from "../../../ui/select";
+import { DatePicker } from "../../../DatePicker";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
-export interface IBugdet {
-  isLoading: {
-    submitLoading: boolean;
-    departmentsLoading: boolean;
-    fundsLoading: boolean;
-  };
+export interface IGl {
+  isDepartmentLoading: boolean;
+  isFundLoading: boolean;
+  isReqLoading: boolean;
   onSubmit: HTMLFormElement["onsubmit"];
-  form: FormProps;
-  fundTypeOnChange: () => void;
-  fundSelectOnChange: () => void;
+  form: any;
   fundList: any[];
   departmentList: any[];
 }
 
 export default function GlForm({
   form,
-  isLoading,
+  isDepartmentLoading,
+  isFundLoading,
+  isReqLoading,
   fundList,
   departmentList,
-  fundTypeOnChange,
-  fundSelectOnChange,
   onSubmit,
-}: IBugdet) {
+}: IGl) {
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
       <Form {...form}>
@@ -55,11 +50,11 @@ export default function GlForm({
             name="startDate"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>From</FormLabel>
+                <FormLabel>Date</FormLabel>
                 <FormControl className="w-full">
                   <DatePicker
                     onSelect={field.onChange}
-                    date={form.watch("startDate")}
+                    selected={form.watch("startDate")}
                   />
                 </FormControl>
                 <FormMessage />
@@ -71,39 +66,16 @@ export default function GlForm({
             name="endDate"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>To</FormLabel>
+                <FormLabel>Date</FormLabel>
                 <FormControl className="w-full">
                   <DatePicker
                     onSelect={field.onChange}
-                    date={form.watch("endDate")}
-                    initialMonth={form.watch("startDate")}
+                    selected={form.watch("endDate")}
+                    fromDate={form.watch("startDate")}
+                    defaultMonth={form.watch("startDate")}
+                    defaultYear={form.watch("startDate")}
                   />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="fundType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Fund Type</FormLabel>
-                <Select
-                  onValueChange={(val) => fundTypeOnChange(val, field)}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Fund Type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value={"General"}>General</SelectItem>
-                    <SelectItem value={"Fedral"}>Fedral</SelectItem>
-                  </SelectContent>
-                </Select>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -116,9 +88,7 @@ export default function GlForm({
               <FormItem>
                 <FormLabel>Fund</FormLabel>
                 <Select
-                  onValueChange={(val: string) =>
-                    fundSelectOnChange(val, field)
-                  }
+                  onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -127,7 +97,7 @@ export default function GlForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {isLoading.fundsLoading ? (
+                    {isFundLoading ? (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <ReloadIcon className="h-4 w-4 m-auto animate-spin" />
                       </div>
@@ -169,23 +139,23 @@ export default function GlForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {isLoading.departmentsLoading ? (
+                    {isDepartmentLoading ? (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <ReloadIcon className="h-4 w-4 m-auto animate-spin" />
                       </div>
                     ) : departmentList?.length > 0 ? (
                       departmentList?.map((department) => (
                         <SelectItem
-                          key={department?.Global_Dimension_1_Code}
-                          value={department?.Global_Dimension_1_Code}
+                          key={department?.Code}
+                          value={department?.Code}
                         >
-                          {`${department?.Global_Dimension_1_Code} ${department?.G_L_Account_Name}`}
+                          {`${department?.Code} ${department?.Name}`}
                         </SelectItem>
                       ))
                     ) : (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <p className="text-sm">
-                          {form.watch("fund")
+                          {form.watch("fundNo")
                             ? "Not Found"
                             : "Select first Fund"}
                         </p>
@@ -200,11 +170,11 @@ export default function GlForm({
           />
 
           <Button
-            disabled={isLoading.submitLoading}
+            disabled={isReqLoading}
             type="submit"
             className="max-h-9 text-sm self-end"
           >
-            {isLoading.submitLoading && (
+            {isReqLoading && (
               <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             )}
             Request

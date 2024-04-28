@@ -1,5 +1,4 @@
 "use client";
-import { FormProps } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -21,26 +20,22 @@ import { DatePicker } from "../../../DatePicker";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
 export interface IBugdet {
-  isLoading: {
-    submitLoading: boolean;
-    departmentsLoading: boolean;
-    fundsLoading: boolean;
-  };
+  isDepartmentLoading: boolean;
+  isFundLoading: boolean;
+  isReqLoading: boolean;
   onSubmit: HTMLFormElement["onsubmit"];
-  form: FormProps;
-  fundTypeOnChange: () => void;
-  fundSelectOnChange: () => void;
+  form: any;
   fundList: any[];
   departmentList: any[];
 }
 
 export default function BugdetForm({
   form,
-  isLoading,
+  isDepartmentLoading,
+  isFundLoading,
+  isReqLoading,
   fundList,
   departmentList,
-  fundTypeOnChange,
-  fundSelectOnChange,
   onSubmit,
 }: IBugdet) {
   return (
@@ -52,56 +47,26 @@ export default function BugdetForm({
         >
           <FormField
             control={form.control}
-            name="date"
+            name="endDate"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Date</FormLabel>
                 <FormControl className="w-full">
-                  <DatePicker
-                    onSelect={field.onChange}
-                    date={form.watch("date")}
-                  />
+                  <DatePicker onSelect={field.onChange} selected={field.value} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="fundType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Fund Type</FormLabel>
-                <Select
-                  onValueChange={(val) => fundTypeOnChange(val, field)}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Fund Type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value={"General"}>General</SelectItem>
-                    <SelectItem value={"Fedral"}>Fedral</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}
-            name="fund"
+            name="fundNo"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Fund</FormLabel>
                 <Select
-                  onValueChange={(val: string) =>
-                    fundSelectOnChange(val, field)
-                  }
+                  onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -110,7 +75,7 @@ export default function BugdetForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {isLoading.fundsLoading ? (
+                    {isFundLoading ? (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <ReloadIcon className="h-4 w-4 m-auto animate-spin" />
                       </div>
@@ -123,9 +88,9 @@ export default function BugdetForm({
                     ) : (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <p className="text-sm">
-                          {form.watch("fundType")
+                          {form.watch("endDate")
                             ? "Not Found"
-                            : "Select first Fundy Type"}
+                            : "Select first Date"}
                         </p>
                       </div>
                     )}
@@ -143,9 +108,7 @@ export default function BugdetForm({
               <FormItem>
                 <FormLabel>Department Codes</FormLabel>
                 <Select
-                  onValueChange={async (val) => {
-                    field.onChange(val);
-                  }}
+                  onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -154,23 +117,23 @@ export default function BugdetForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {isLoading.departmentsLoading ? (
+                    {isDepartmentLoading ? (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <ReloadIcon className="h-4 w-4 m-auto animate-spin" />
                       </div>
                     ) : departmentList?.length > 0 ? (
                       departmentList?.map((department) => (
                         <SelectItem
-                          key={department?.Global_Dimension_1_Code}
-                          value={department?.Global_Dimension_1_Code}
+                          key={department?.Code}
+                          value={department?.Code}
                         >
-                          {`${department?.Global_Dimension_1_Code} ${department?.G_L_Account_Name}`}
+                          {`${department?.Code} ${department?.Name}`}
                         </SelectItem>
                       ))
                     ) : (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <p className="text-sm">
-                          {form.watch("fund")
+                          {form.watch("fundNo")
                             ? "Not Found"
                             : "Select first Fund"}
                         </p>
@@ -185,11 +148,11 @@ export default function BugdetForm({
           />
 
           <Button
-            disabled={isLoading.submitLoading}
+            disabled={isReqLoading}
             type="submit"
             className="max-h-9 text-sm self-end"
           >
-            {isLoading.submitLoading && (
+            {isReqLoading && (
               <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             )}
             Request

@@ -154,7 +154,7 @@ export function ProfileForm({ email, firstName, lastName, isMe = false }: any) {
             )}
           </CardContent>
           <CardFooter>
-            <Button disabled={disabled} className="ml-auto">
+            <Button type="submit" disabled={disabled} className="ml-auto">
               {isLoading && (
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
               )}

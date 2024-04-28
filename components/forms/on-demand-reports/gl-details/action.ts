@@ -27,22 +27,13 @@ axiosInterceptorInstance.interceptors.request.use(
 
 
 
-export const getGlDetailsTable = async ({ fundNo, departmentCode, startDate, endDate }: any) => {
-    try {
-        const { data } = await axiosInterceptorInstance.get(
-            `General_Ledger_Entries_Excel?$filter=Posting_Date ge ${startDate} and Posting_Date le ${endDate} and Fund_No_NVG eq \'${fundNo}\' and Global_Dimension_1_Code eq \'${departmentCode}\'&$count=true`,
-        );
-        return data;
-    } catch (error) {
-        console.error("getBudgetTable ", error);
-    }
-};
+
 export const fetchNextPageData = async (url: string) => {
     try {
         const { data } = await axiosInterceptorInstance.get(url);
         return data;
 
     } catch (error) {
-        console.error("getBudgetTablePagination ", error);
+        console.error("fetchNext ", error);
     }
 }

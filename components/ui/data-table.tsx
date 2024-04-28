@@ -17,14 +17,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "./skeleton";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  fetchNextPage?: () => void;
+  fetchNextPage: () => void;
   hasNextPage?: boolean;
-  isFetchingNextPage?: boolean;
+  isFetchingNext?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -32,6 +32,7 @@ export function DataTable<TData, TValue>({
   data,
   hasNextPage,
   fetchNextPage,
+  isFetchingNext,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -39,21 +40,8 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
   const { rows } = table.getRowModel();
-  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
-
-  const containerRef = useBottomScrollListener(
-    useCallback(async () => {
-      try {
-        if (hasNextPage) {
-          setIsFetchingNextPage(true);
-          await fetchNextPage?.();
-        }
-      } catch (error) {
-        console.error("error ", error);
-      } finally {
-        setIsFetchingNextPage(false);
-      }
-    }, [hasNextPage])
+  const containerRef = useBottomScrollListener<any>(
+    useCallback(!!fetchNextPage ? fetchNextPage : () => {}, [hasNextPage])
   );
 
   return (
@@ -105,8 +93,8 @@ export function DataTable<TData, TValue>({
               </TableRow>
             );
           })}
-          {isFetchingNextPage &&
-            new Array(25).fill(null).map((_, rowKey) => (
+          {isFetchingNext &&
+            new Array(80).fill(null).map((_, rowKey) => (
               <TableRow key={rowKey}>
                 {table.getHeaderGroups()[0].headers.map((_, key) => (
                   <TableCell className="text-center border-r" key={key}>

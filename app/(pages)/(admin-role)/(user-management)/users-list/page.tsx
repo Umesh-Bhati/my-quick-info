@@ -1,5 +1,4 @@
 import { prisma } from "@/app/api/db";
-import Header from "@/components/Header";
 import UsersTable from "@/components/tables/users-list";
 
 export default async function UsersList(props) {

@@ -3,19 +3,14 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-interface IDatePicker {
-  onSelect: () => void;
-  date: string;
-}
-
-export function DatePicker({ onSelect, date, ...calenderProps }: IDatePicker) {
+export function DatePicker(props: CalendarProps | any) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -25,20 +20,15 @@ export function DatePicker({ onSelect, date, ...calenderProps }: IDatePicker) {
           }
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? date : <span>Posting Date</span>}
+          {props.selected ? (
+            format(props?.selected, "MM-dd-yyyy")
+          ) : (
+            <span>Posting Date</span>
+          )}
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={(val: Date) => {
-            const formatedDate = format(val, "yyyy-MM-dd");
-            onSelect(formatedDate);
-          }}
-          initialFocus
-          {...calenderProps}
-        />
+        <Calendar  mode="single" {...props} />
       </PopoverContent>
     </Popover>
   );

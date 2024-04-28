@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcrypt';
+import bcrypt, { compare } from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 
 
@@ -31,9 +31,11 @@ const handler = NextAuth({
           if (!user) {
             return null
           }
+          const isMatch = compare(credentials?.password || '', user.password)
+          if (!isMatch) return null
           return user;
         } catch (error) {
-
+          console.error("err ", error);
         }
       },
     }),
