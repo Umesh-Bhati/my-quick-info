@@ -52,7 +52,7 @@ export default function BugdetForm({
               <FormItem className="w-full">
                 <FormLabel>Date</FormLabel>
                 <FormControl className="w-full">
-                  <DatePicker onSelect={field.onChange} selected={field.value} />
+                  <DatePicker onSelect={field.onChange} selected={field.value} defaultMonth={field.value} defaultYear={field.value} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

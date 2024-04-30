@@ -2,8 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 
 export type Budget = {
   id: string;
@@ -14,6 +12,8 @@ export type Budget = {
   openPurchOrd: string;
   openReq: string;
   budget: string;
+  total?: string;
+  desc?: string;
 };
 
 export const columns: ColumnDef<Budget>[] = [
@@ -24,6 +24,14 @@ export const columns: ColumnDef<Budget>[] = [
   {
     accessorKey: "Description",
     header: "Description",
+    cell: ({ row }) =>
+      row.original?.desc ? (
+        <h1 className="text-primary-forground text-sm font-bold">
+          Total: {row.original.desc}
+        </h1>
+      ) : (
+        row.original.Description
+      ),
   },
   {
     accessorKey: "mtd",
@@ -32,6 +40,14 @@ export const columns: ColumnDef<Budget>[] = [
   {
     accessorKey: "ytd",
     header: "YTD",
+    cell: ({ row }) =>
+      row.original?.desc ? (
+        <h1 className="text-primary-forground text-sm font-bold">
+          {row.original.ytd}
+        </h1>
+      ) : (
+        row.original.ytd
+      ),
   },
   {
     accessorKey: "openPurchOrd",

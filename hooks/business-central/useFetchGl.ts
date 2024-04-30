@@ -8,7 +8,8 @@ interface IGlArgs {
     startDate?: number | string;
     endDate: number | string;
     fundNo: number | string;
-    departmentCode: number | string
+    departmentCode: number | string;
+    transactionType?: "Actual"
 }
 
 interface IData {
@@ -16,6 +17,8 @@ interface IData {
     "@odata.nextLink": string;
     value: any[]
 }
+
+
 
 export default function useFetchGl() {
     const [data, setData] = useState<IData>({ value: [], "@odata.count": 0, "@odata.nextLink": "" })
@@ -28,7 +31,8 @@ export default function useFetchGl() {
                 setIsFetchingNext(true)
                 if (hasNextPage) {
                     const responseNextPageData = await fetchNextPageData(data["@odata.nextLink"])
-                    setData(old => ({ ...responseNextPageData, value: [...old.value, ...responseNextPageData?.["value"] || []] }))
+                    console.log("responseNextPageData ", responseNextPageData)
+                    setData(old => ({ ...responseNextPageData, value: [...old.value, ...responseNextPageData?.["value"]] }))
                 }
             } else if (type === 'on-submit') {
                 setIsLoading(true)

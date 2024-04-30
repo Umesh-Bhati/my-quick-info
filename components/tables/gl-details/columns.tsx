@@ -10,6 +10,8 @@ export type GlDetail = {
   Document_No: string;
   Amount: number;
   External_Document_No: string;
+  total?: string;
+  desc?: string;
 };
 
 export const columns: ColumnDef<GlDetail>[] = [
@@ -20,6 +22,14 @@ export const columns: ColumnDef<GlDetail>[] = [
   {
     accessorKey: "G_L_Account_Name",
     header: "G/L Account Name",
+    cell: ({ row }) =>
+      row.original.desc ? (
+        <h1 className="text-primary-forground text-sm font-semiBold">
+          Total:{row.original.desc}
+        </h1>
+      ) : (
+        row.original.G_L_Account_Name
+      ),
   },
   {
     accessorKey: "Posting_Date",
@@ -40,5 +50,13 @@ export const columns: ColumnDef<GlDetail>[] = [
   {
     accessorKey: "Amount",
     header: "Amount",
+    cell: ({ row }) =>
+      row.original.desc ? (
+        <h1 className="text-primary-forground text-sm font-semiBold">
+          {row.original.total}
+        </h1>
+      ) : (
+        row.original.Amount
+      ),
   },
 ];

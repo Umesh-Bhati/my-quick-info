@@ -21,7 +21,7 @@ export default function useGlDetailTable() {
     });
     const { fetchGls, ...others } = useFetchGl()
     const onSubmit = async (values: any) => {
-        fetchGls('on-submit', values);
+        fetchGls('on-submit', { ...values, transactionType: 'Actual' });
     };
 
     return {

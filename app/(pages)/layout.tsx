@@ -9,6 +9,7 @@ import AuthProvider from "@/contexts/AuthProvider";
 import Footer from "@/components/Footer";
 import { prisma } from "../api/db";
 import { getServerSession } from "next-auth";
+import { NextAuthOptions } from "../api/auth/[...nextauth]/route";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -16,7 +17,8 @@ const fontSans = FontSans({
 });
 
 export default async function RootLayout({ children }) {
-  const data = await getServerSession();
+  const data = await getServerSession(NextAuthOptions);
+  console.log("serverData ", data);
   const email = data?.user?.email || "";
   const { is_admin = false } =
     (await prisma?.users?.findUnique({ where: { email } })) || {};

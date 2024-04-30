@@ -64,11 +64,11 @@ export default function TabSection() {
         />
       </TabsContent>
       <TabsContent className={"flex  flex-col"} value="apInquiry">
-        <ApInquiryForm {...glDetailsController} />
+        {/* <ApInquiryForm {...glDetailsController} />
         <ApInquiryTable
           data={glDetailsController.glTableData || []}
           {...glDetailsController}
-        />
+        /> */}
       </TabsContent>
     </Tabs>
   );

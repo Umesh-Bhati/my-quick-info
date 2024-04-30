@@ -50,10 +50,11 @@ export function DataTable<TData, TValue>({
         position: "relative",
         overflow: "auto",
         maxHeight: "900px",
-        minHeight: data.length > 0 ? "fit" : "700px",
         scrollbarWidth: "none",
       }}
-      className="rounded-md  border bg-accent/30  "
+      className={`rounded-md  border bg-accent/30 ${
+        data.length > 0 ? "min-h-fit" : "min-h-[700px]"
+      } `}
       ref={containerRef}
     >
       <Table>

@@ -22,7 +22,7 @@ export default function useFetchDepartments() {
             if (type === 'fetch-next') {
                 setIsFetchingNext(true)
                 if (hasNext) {
-                    const { data: responseNextPageData } = await fetchNextPageData(data["@odata.nextLink"])
+                    const responseNextPageData = await fetchNextPageData(data["@odata.nextLink"])
                     setData(old => ({ ...responseNextPageData, value: [...old.value, ...responseNextPageData?.["value"] || []] }))
                 }
             } else if (type === 'on-submit') {

@@ -1,53 +1,93 @@
 import { endOfDay, startOfMonth } from "date-fns";
 
+const fixedDecimal = (decimal: number): number =>
+  Number.isInteger(decimal) ? decimal : +Number(decimal).toFixed(2);
 
 const budgetTable = (data: any[], postingDate: string | Date) => {
-    const startOfPostingMonth = startOfMonth(postingDate);
-    const endOfPostingDate = endOfDay(postingDate);
-    const formatedOutPut = data.reduce((accVal: any[], currVal: any) => {
-        let existingIndex = accVal.findIndex((item) => item['G_L_Account_No'] === currVal['G_L_Account_No']);
-        if (existingIndex !== -1) {
-            let accCurrVal = accVal[existingIndex];
-            if (currVal.Transaction_Type_NVG === "Actual") {
-                accCurrVal["ytd"] += currVal["Amount"];
-                accCurrVal["mtd"] += new Date(currVal.Posting_Date) >= startOfPostingMonth && new Date(currVal.Posting_Date) <= endOfPostingDate ? currVal["Amount"] : 0;
-            } else if (currVal.Transaction_Type_NVG === "Encumbrance") {
-                accCurrVal["openPurchOrd"] += currVal["Amount"];
-            } else if (currVal.Transaction_Type_NVG === "Commitment") {
-                accCurrVal["openReq"] += currVal["Amount"];
-            } else if (currVal.Transaction_Type_NVG === "Budget") {
-                accCurrVal["budget"] += currVal["Amount"];
-            }
-            accVal[existingIndex] = accCurrVal;
-        } else {
-            let newObj: any = { ...currVal, ytd: 0, mtd: 0, budget: 0, openReq: 0, openPurchOrd: 0 };
-            if (currVal.Transaction_Type_NVG === "Actual") {
-                newObj["ytd"] = +currVal["Amount"];
-                if (new Date(currVal.Posting_Date) >= startOfPostingMonth && new Date(currVal.Posting_Date) <= endOfPostingDate) newObj["mtd"] = +currVal["Amount"];
-            } else if (currVal.Transaction_Type_NVG === "Encumbrance") {
-                newObj["openPurchOrd"] = +currVal["Amount"];
-            } else if (currVal.Transaction_Type_NVG === "Commitment") {
-                newObj["openReq"] = +currVal["Amount"];
-            } else if (currVal.Transaction_Type_NVG === "Budget") {
-                newObj["budget"] = +currVal["Amount"];
-            }
-            accVal.push(newObj);
+  const startOfPostingMonth = startOfMonth(postingDate);
+  const endOfPostingDate = endOfDay(postingDate);
+  let total = 0;
+  let lastItemOccurence: any;
+  let formatedObj = {
+    mtd: 0,
+    ytd: 0,
+    openPurchOrd: 0,
+    openReq: 0,
+    budget: 0,
+  };
+  let lastItem: any = {};
+  let isRevenueCal = false;
+  const finalResponse: any[] = [];
+  data
+    .sort(
+      (firstItem, secItem) =>
+        +firstItem["G_L_Account_No"] - secItem["G_L_Account_No"]
+    )
+    .forEach((item, index) => {
+      if (index === 0) {
+        lastItemOccurence = item["G_L_Account_No"];
+      }
+      if (lastItemOccurence !== item["G_L_Account_No"]) {
+        if (!isRevenueCal && +lastItemOccurence?.toString()[0] !== 4) {
+          finalResponse.push({ ytd: total, desc: "Revenue" });
+          isRevenueCal = true;
+          total = 0;
         }
-        return accVal;
-    }, []);
-
-
-    formatedOutPut.forEach((item: any) => {
-        if (item.mtd !== undefined) item.mtd = Math.round(item.mtd).toLocaleString('en-US',);
-        if (item.ytd !== undefined) item.ytd = Math.round(item.ytd).toLocaleString('en-US',);
-        if (item.openPurchOrd !== undefined) item.openPurchOrd = Math.round(item.openPurchOrd).toLocaleString('en-US',);
-        if (item.openReq !== undefined) item.openReq = Math.round(item.openReq).toLocaleString('en-US',);
-        if (item.budget !== undefined) item.budget = Math.round(item.budget).toLocaleString('en-US',);
+        finalResponse.push({ ...lastItem, ...formatedObj });
+        lastItemOccurence = item["G_L_Account_No"];
+        formatedObj = {
+          mtd: 0,
+          ytd: 0,
+          openPurchOrd: 0,
+          openReq: 0,
+          budget: 0,
+        };
+      }
+      if (lastItemOccurence === item["G_L_Account_No"]) {
+        const { Amount = 0 } = item;
+        total = fixedDecimal(total + Amount);
+        lastItem = item;
+        switch (item.Transaction_Type_NVG) {
+          case "Actual": {
+            if (
+              new Date(item.Posting_Date) >= startOfPostingMonth &&
+              new Date(item.Posting_Date) <= endOfPostingDate
+            ) {
+              formatedObj["mtd"] = fixedDecimal(+formatedObj["mtd"] + +Amount);
+            }
+            formatedObj["ytd"] = fixedDecimal(+formatedObj["ytd"] + +Amount);
+            break;
+          }
+          case "Encumbrance": {
+            formatedObj["openPurchOrd"] = fixedDecimal(
+              +formatedObj["openPurchOrd"] + +Amount
+            );
+            break;
+          }
+          case "Commitment": {
+            formatedObj["openReq"] = fixedDecimal(
+              +formatedObj["openReq"] + +Amount
+            );
+            break;
+          }
+          case "Budget": {
+            formatedObj["budget"] = fixedDecimal(
+              +formatedObj["budget"] + +Amount
+            );
+            break;
+          }
+        }
+        if (index === data.length - 1) {
+          finalResponse.push(
+            { ...item, ...formatedObj },
+            { ytd: total, desc: "Expense" }
+          );
+        }
+      }
     });
-
-    return formatedOutPut;
-}
+  return finalResponse;
+};
 
 export const bcTableFormatters = {
-    budgetTable
-}
+  budgetTable,
+};
