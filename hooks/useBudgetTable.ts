@@ -15,7 +15,6 @@ export default function useBudgetTable() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            endDate: new Date(),
             fundNo: "",
             departmentCode: "",
         },
