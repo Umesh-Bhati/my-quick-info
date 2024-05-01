@@ -9,16 +9,20 @@ import AuthProvider from "@/contexts/AuthProvider";
 import Footer from "@/components/Footer";
 import { prisma } from "../api/db";
 import { getServerSession } from "next-auth";
-import { NextAuthOptions } from "../api/auth/[...nextauth]/route";
+import { NextAuthOptions } from "@/configs/NextAuthOptions";
+import { ReactNode } from "react";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode | ReactNode[];
+}) {
   const data = await getServerSession(NextAuthOptions);
-  console.log("serverData ", data);
   const email = data?.user?.email || "";
   const { is_admin = false } =
     (await prisma?.users?.findUnique({ where: { email } })) || {};

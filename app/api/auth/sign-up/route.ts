@@ -5,8 +5,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
     try {
-        const { email, password, name } = await request.json()
-        console.log("POSTSINF ", { email, password, name })
+        const { email, password, name, last_name = '' } = await request.json()
         if (!email) return NextResponse.json({ message: "email not have" })
         const user = await prisma.users.findUnique({
             where: {
@@ -18,6 +17,8 @@ export async function POST(request: Request) {
         await prisma.users.create({
             data: {
                 name,
+                last_name,
+                active:true,
                 email,
                 password: hashedPassword,
             },

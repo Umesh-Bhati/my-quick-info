@@ -1,7 +1,7 @@
 import { prisma } from "@/app/api/db";
 import UsersTable from "@/components/tables/users-list";
 
-export default async function UsersList(props) {
+export default async function UsersList() {
   const users = await prisma.users.findMany();
   return (
     <section className="w-screen h-screen p-12 bg-background/30 ">

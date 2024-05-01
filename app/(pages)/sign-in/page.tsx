@@ -3,10 +3,10 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 
-export default async function SignInPage(props) {
+export default async function SignInPage() {
   const session = await getServerSession();
   if (session) {
-    redirect("/on-demand");
+    redirect("/");
   }
   return (
     <div className="flex h-screen flex-grow ">

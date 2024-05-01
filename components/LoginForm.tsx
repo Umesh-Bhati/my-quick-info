@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { EyeIcon } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -100,6 +101,7 @@ export function LoginForm() {
               <FormItem>
                 <FormControl>
                   <Input
+                    variant="password"
                     autoComplete="current-password"
                     placeholder="Password"
                     {...field}

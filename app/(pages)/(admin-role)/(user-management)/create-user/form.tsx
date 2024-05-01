@@ -29,7 +29,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function CreateUserForm(props) {
+export default function CreateUserForm() {
   const { toast } = useToast();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -140,7 +140,12 @@ export default function CreateUserForm(props) {
           render={({ field }) => (
             <FormItem className="flex flex-row w-fit items-center space-y-0 gap-5">
               <FormControl className="border items-center w-fit justify-center">
-                <Input type="checkbox" className="border" {...field} />
+                <Input
+                  type="checkbox"
+                  className="border"
+                  {...field}
+                  value={"isAdmin"}
+                />
               </FormControl>
               <FormLabel className="w-fit">isAdmin</FormLabel>
             </FormItem>

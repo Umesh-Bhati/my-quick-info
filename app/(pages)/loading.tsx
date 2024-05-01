@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function LoadingPage(props) {
+export default function LoadingPage() {
   return (
     <main className="w-screen h-screen bg-black m-auto">
       <Image

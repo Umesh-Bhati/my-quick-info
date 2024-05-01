@@ -52,7 +52,12 @@ export default function BugdetForm({
               <FormItem className="w-full">
                 <FormLabel>Date</FormLabel>
                 <FormControl className="w-full">
-                  <DatePicker onSelect={field.onChange} selected={field.value} defaultMonth={field.value} defaultYear={field.value} />
+                  <DatePicker
+                    onSelect={field.onChange}
+                    selected={field.value}
+                    defaultMonth={field.value}
+                    defaultYear={field.value}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,7 +87,7 @@ export default function BugdetForm({
                     ) : fundList.length > 0 ? (
                       fundList?.map((fund) => (
                         <SelectItem key={fund.No} value={fund.No}>
-                          {`${fund.No} ${fund.Name}`}
+                          {`${fund.No} ${fund.Name ? fund.Name : ""}`}
                         </SelectItem>
                       ))
                     ) : (
@@ -127,7 +132,9 @@ export default function BugdetForm({
                           key={department?.Code}
                           value={department?.Code}
                         >
-                          {`${department?.Code} ${department?.Name}`}
+                          {`${department?.Code} ${
+                            department?.Name ? department?.Name : ""
+                          }`}
                         </SelectItem>
                       ))
                     ) : (

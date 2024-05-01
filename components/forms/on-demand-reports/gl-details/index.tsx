@@ -104,7 +104,7 @@ export default function GlForm({
                     ) : fundList.length > 0 ? (
                       fundList?.map((fund) => (
                         <SelectItem key={fund.No} value={fund.No}>
-                          {`${fund.No} ${fund.Name}`}
+                          {`${fund.No} ${fund.Name ? fund.Name : ''}`}
                         </SelectItem>
                       ))
                     ) : (
@@ -149,7 +149,9 @@ export default function GlForm({
                           key={department?.Code}
                           value={department?.Code}
                         >
-                          {`${department?.Code} ${department?.Name}`}
+                          {`${department?.Code} ${
+                            department?.Name ? department?.Name : ""
+                          }`}
                         </SelectItem>
                       ))
                     ) : (

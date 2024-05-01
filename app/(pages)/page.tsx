@@ -1,10 +1,8 @@
-import Footer from "@/components/Footer";
 import Image from "next/image";
 import TabSection from "../(sections)/TabSection";
 import { getOAuthToken } from "../api/utils/getOAuthToken";
-import Header from "@/components/Header";
 
-export default async function HomePage(props) {
+export default async function HomePage() {
   await getOAuthToken();
   return (
     <div

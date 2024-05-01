@@ -25,7 +25,7 @@ export const columns: ColumnDef<GlDetail>[] = [
     cell: ({ row }) =>
       row.original.desc ? (
         <h1 className="text-primary-forground text-sm font-semiBold">
-          Total:{row.original.desc}
+          Total: {row.original.desc}
         </h1>
       ) : (
         row.original.G_L_Account_Name
