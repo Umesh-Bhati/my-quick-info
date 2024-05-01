@@ -110,9 +110,9 @@ export default function GlForm({
                     ) : (
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <p className="text-sm">
-                          {form.watch("fundType")
+                          {form.watch("endDate")
                             ? "Not Found"
-                            : "Select first Fundy Type"}
+                            : "Select first Posting Date"}
                         </p>
                       </div>
                     )}

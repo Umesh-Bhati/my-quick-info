@@ -35,7 +35,10 @@ export const fetchDepartments = async () => {
     if (user?.is_admin) {
       let { data = { value: [], "@odata.count": 0, "@odata.nextLink": "" } } =
         (await axiosInterceptorInstance.get("dept_code?$count=true")) || {};
-      return data;
+      if (data.value.length > 0) {
+        return data;
+      }
+      return { value: [], "@odata.count": 0, "@odata.nextLink": "" }
     }
     const scops = await prisma.user_scopes.findMany({ where: { user_id: 4 } });
     const uniqueCodes = new Set();
@@ -57,7 +60,10 @@ export const fetchFunds = async () => {
     if (user?.is_admin) {
       const { data = { value: [], "@odata.count": 0, "@odata.nextLink": "" } } =
         await axiosInterceptorInstance.get("Fund_List?$count=true");
-      return data;
+      if (data.value.length > 0) {
+        return data;
+      }
+      return { value: [], "@odata.count": 0, "@odata.nextLink": "" }
     }
     const scops = await prisma.user_scopes.findMany({ where: { user_id: 4 } });
 

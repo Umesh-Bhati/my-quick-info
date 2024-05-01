@@ -28,12 +28,12 @@ const budgetTable = (data: any[], postingDate: string | Date) => {
         lastItemOccurence = item["G_L_Account_No"];
       }
       if (lastItemOccurence !== item["G_L_Account_No"]) {
-        if (!isRevenueCal && +lastItemOccurence?.toString()[0] !== 4) {
+        finalResponse.push({ ...lastItem, ...formatedObj });
+        if (!isRevenueCal && +item["G_L_Account_No"]?.toString()[0] !== 4) {
           finalResponse.push({ ytd: total, desc: "Revenue" });
           isRevenueCal = true;
           total = 0;
         }
-        finalResponse.push({ ...lastItem, ...formatedObj });
         lastItemOccurence = item["G_L_Account_No"];
         formatedObj = {
           mtd: 0,
@@ -85,6 +85,7 @@ const budgetTable = (data: any[], postingDate: string | Date) => {
         }
       }
     });
+
   return finalResponse;
 };
 
