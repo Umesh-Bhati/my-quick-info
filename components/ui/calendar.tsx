@@ -23,9 +23,9 @@ function Calendar({
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-between   items-center",
-        caption_label: "text-md space-x-2 font-medium",
-        nav: "space-x-1 flex items-center",
+        caption: "flex justify-between  gap-5 items-center",
+        caption_label: "text-md flex-row flex items-center mr-5  font-medium",
+        nav: " gap-5 flex-row flex items-center",
 
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
@@ -59,6 +59,7 @@ function Calendar({
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
       }}
+      captionLayout="dropdown"
       {...props}
     />
   );

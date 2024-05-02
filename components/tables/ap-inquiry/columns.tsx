@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-export type GlDetail = {
+export type VendorType = {
   G_L_Account_No: string;
   G_L_Account_Name: string;
   Posting_Date: string;
@@ -10,9 +10,11 @@ export type GlDetail = {
   Document_No: string;
   Amount: number;
   External_Document_No: string;
+  Vendor_No: string;
+  Vendor_Name: string;
 };
 
-export const columns: ColumnDef<GlDetail>[] = [
+export const columns: ColumnDef<VendorType>[] = [
   {
     accessorKey: "Posting_Date",
     header: "Document Date",
@@ -31,11 +33,11 @@ export const columns: ColumnDef<GlDetail>[] = [
     header: "External Document No",
   },
   {
-    accessorKey: "Document_No",
+    accessorKey: "Vendor_No",
     header: "Vendor No",
   },
   {
-    accessorKey: "External_Document_No",
+    accessorKey: "Vendor_Name",
     header: "Vendor Name",
   },
   {

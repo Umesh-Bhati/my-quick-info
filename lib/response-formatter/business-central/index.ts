@@ -29,7 +29,7 @@ const budgetTable = (data: any[], postingDate: string | Date) => {
       }
       if (lastItemOccurence !== item["G_L_Account_No"]) {
         finalResponse.push({ ...lastItem, ...formatedObj });
-        if (!isRevenueCal && +item["G_L_Account_No"]?.toString()[0] !== 4) {
+        if (!isRevenueCal && +lastItemOccurence?.toString()[0] === 4 && +item["G_L_Account_No"]?.toString()[0] !== 4) {
           finalResponse.push({ ytd: total, desc: "Revenue" });
           isRevenueCal = true;
           total = 0;

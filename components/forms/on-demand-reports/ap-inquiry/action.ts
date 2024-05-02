@@ -2,10 +2,12 @@
 
 import { getOAuthToken } from "@/app/api/utils/getOAuthToken";
 import axios from "axios";
+import { format } from "date-fns";
 
 
 const axiosInterceptorInstance = axios.create({
     baseURL: "https://api.businesscentral.dynamics.com/v2.0/9a3b820c-c73a-42e3-bb1f-e6029580103b/Production/ODataV4/Company('Cahuilla')/",
+
 });
 
 axiosInterceptorInstance.interceptors.request.use(
@@ -15,7 +17,7 @@ axiosInterceptorInstance.interceptors.request.use(
         if (accessToken) {
             if (config.headers) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
-                config.headers["Prefer"] = "odata.maxpagesize=25"
+                config.headers["Prefer"] = "odata.maxpagesize=100"
             }
         }
         return config;
@@ -27,21 +29,49 @@ axiosInterceptorInstance.interceptors.request.use(
 
 
 
-export const getGlDetailsTable = async ({ fundNo, departmentCode, startDate, endDate }: any) => {
+export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description }: any) => {
+    console.log("{ startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description }", { startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description })
     try {
+        let query = "Vendor_Ledger_Entries_Excel?$filter="
+        if (startDate) {
+            query += `Posting_Date ge ${format(startDate, "yyyy-MM-dd")} and `
+        }
+        if (endDate) {
+            query += `Posting_Date le ${format(endDate, "yyyy-MM-dd")} and `
+        }
+        if (Vendor_Name) {
+            query += `Vendor_Name eq \`${Vendor_Name}\` and `
+        }
+        if (Vendor_No) {
+            query += `Vendor_No eq \'${Vendor_No}\' and `
+        }
+        if (Document_Type) {
+            query += `Document_Type eq \'${Document_Type}\' and `
+        }
+        if (Description) {
+            query += `Description eq \'${Description}\' and `
+        }
+        if (query.trim().endsWith("and")) {
+            query = query.trim().slice(0, -3);
+        }
+
         const { data } = await axiosInterceptorInstance.get(
-            `General_Ledger_Entries_Excel?$filter=Posting_Date ge ${startDate} and Posting_Date le ${endDate} and Fund_No_NVG eq \'${fundNo}\' and Global_Dimension_1_Code eq \'${departmentCode}\'&$count=true`,
+            `${query}&$count=true`,
         );
-        return data;
+
+        if (data?.value && data.value.length > 0) {
+            return data;
+        }
+        return { value: [], "@odata.count": 0, "@odata.nextLink": '' }
     } catch (error) {
-        console.error("getBudgetTable ", error);
+        console.error("fetchVenderoErro server ", error);
     }
 };
+
 export const fetchNextPageData = async (url: string) => {
     try {
         const { data } = await axiosInterceptorInstance.get(url);
         return data;
-
     } catch (error) {
         console.error("getBudgetTablePagination ", error);
     }

@@ -1,11 +1,7 @@
 "use client";
-import { GlDetail } from "./columns";
-// import { DataTable } from "@/components/ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "./columns";
 
-export default function ApInquiryTable({
-  data,
-}: {
-  data: GlDetail[];
-}) {
-  return <></>;
+export default function ApInquiryTable(props: any) {
+  return <DataTable columns={columns} {...props} />;
 }

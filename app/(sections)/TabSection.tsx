@@ -11,16 +11,18 @@ import BugdetForm from "@/components/forms/on-demand-reports/budget-vs-actual";
 import { useFetchDepartments, useFetchFunds } from "@/hooks/business-central";
 import { useEffect } from "react";
 import { bcTableFormatters } from "@/lib/response-formatter/business-central";
+import useApVendorTable from "@/hooks/useApVendorTable";
 
 export default function TabSection() {
   const budgetController = useBudgetTable();
   const glDetailsController = useGlDetailTable();
   const departmentProps = useFetchDepartments();
   const fundsProps = useFetchFunds();
+  const apVendorController = useApVendorTable();
 
   useEffect(() => {
-    fundsProps.fetchFunds('on-submit');
-    departmentProps.fetchDepartments('on-submit');
+    fundsProps.fetchFunds("on-submit");
+    departmentProps.fetchDepartments("on-submit");
   }, []);
 
   return (
@@ -64,11 +66,14 @@ export default function TabSection() {
         />
       </TabsContent>
       <TabsContent className={"flex  flex-col"} value="apInquiry">
-        {/* <ApInquiryForm {...glDetailsController} />
+        <ApInquiryForm
+          isReqLoading={apVendorController.isLoading}
+          {...apVendorController}
+        />
         <ApInquiryTable
-          data={glDetailsController.glTableData || []}
-          {...glDetailsController}
-        /> */}
+          {...apVendorController}
+          data={apVendorController.data.value}
+        />
       </TabsContent>
     </Tabs>
   );
