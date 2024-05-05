@@ -8,7 +8,6 @@ const formSchema = z.object({
     endDate: z.date(),
     fundNo: z.string(),
     departmentCode: z.string(),
-
 });
 
 export default function useBudgetTable() {
@@ -16,7 +15,7 @@ export default function useBudgetTable() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             fundNo: "",
-            departmentCode: "",
+            departmentCode: "All",
         },
     });
     const { fetchGls, ...others } = useFetchGl()
@@ -24,10 +23,25 @@ export default function useBudgetTable() {
         fetchGls('on-submit', values);
     };
 
+    const exportToPdf = async () => {
+        try {
+            if (others.hasNextPage) {
+                const hasNext = await fetchGls('fetch-next')
+                console.log("called ", hasNext, others.hasNextPage)
+                if (hasNext) await exportToPdf()
+                return
+            }
+
+        } catch (error) {
+            console.error("while generating pdf", error)
+        }
+    }
+
     return {
         onSubmit,
         form,
         fetchNextPage: () => fetchGls('fetch-next'),
+        exportToPdf,
         ...others
     }
 

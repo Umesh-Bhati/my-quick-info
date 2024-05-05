@@ -16,18 +16,33 @@ export default function useGlDetailTable() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             fundNo: "",
-            departmentCode: "",
+            departmentCode: "All",
         },
     });
     const { fetchGls, ...others } = useFetchGl()
     const onSubmit = async (values: any) => {
         fetchGls('on-submit', { ...values, transactionType: 'Actual' });
     };
+    const exportToPdf = async () => {
+        try {
+            if (others.hasNextPage) {
+                const hasNext = await fetchGls('fetch-next')
+                if (hasNext) await exportToPdf()
+                return
+            }
+
+        } catch (error) {
+            console.error("while generating pdf", error)
+        }
+    }
+
+
 
     return {
         onSubmit,
         form,
         fetchNextPage: () => fetchGls('fetch-next'),
+        exportToPdf,
         ...others
     }
 

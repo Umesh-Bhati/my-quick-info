@@ -12,6 +12,7 @@ import { useFetchDepartments, useFetchFunds } from "@/hooks/business-central";
 import { useEffect } from "react";
 import { bcTableFormatters } from "@/lib/response-formatter/business-central";
 import useApVendorTable from "@/hooks/useApVendorTable";
+import BudgetVsActual from "@/components/exports/BudgetVsActual";
 
 export default function TabSection() {
   const budgetController = useBudgetTable();
@@ -41,6 +42,9 @@ export default function TabSection() {
           departmentList={departmentProps.data.value}
           form={budgetController.form}
           isReqLoading={budgetController.isLoading}
+          data={budgetController.data}
+          exportToPdf={budgetController.exportToPdf}
+          isFetchingNext={budgetController.isFetchingNext}
         />
         <BudgetTable
           {...budgetController}
@@ -59,7 +63,17 @@ export default function TabSection() {
           departmentList={departmentProps.data.value}
           form={glDetailsController.form}
           isReqLoading={glDetailsController.isLoading}
+          isFetchingNext={glDetailsController.isFetchingNext}
+          exportToPdf={glDetailsController.exportToPdf}
+          data={glDetailsController.data}
         />
+        <BudgetVsActual
+          fundName={glDetailsController.form.watch("fundNo")}
+          departmentNam={glDetailsController.form.watch("departmentCode")}
+          postingDate={glDetailsController.form.watch("startDate")}
+          data={glDetailsController.data}
+        />
+
         <GlDetailsTable
           {...glDetailsController}
           data={glDetailsController.data.value}

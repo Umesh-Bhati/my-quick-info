@@ -18,6 +18,8 @@ import {
 } from "../../../ui/select";
 import { DatePicker } from "../../../DatePicker";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import ExportPdf from "../../../exports/ExportPdf";
+import GLDocument from "@/components/exports/GLDocument";
 
 export interface IGl {
   isDepartmentLoading: boolean;
@@ -27,6 +29,9 @@ export interface IGl {
   form: any;
   fundList: any[];
   departmentList: any[];
+  exportToPdf: () => void;
+  isFetchingNext?: boolean;
+  data: any;
 }
 
 export default function GlForm({
@@ -37,6 +42,9 @@ export default function GlForm({
   fundList,
   departmentList,
   onSubmit,
+  exportToPdf,
+  isFetchingNext,
+  data,
 }: IGl) {
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
@@ -50,13 +58,13 @@ export default function GlForm({
             name="startDate"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Date</FormLabel>
+                <FormLabel>From</FormLabel>
                 <FormControl className="w-full">
                   <DatePicker
                     onSelect={field.onChange}
                     selected={form.watch("startDate")}
-                    fromYear={2015} 
-                    toYear={new Date().getFullYear()} 
+                    fromYear={2015}
+                    toYear={new Date().getFullYear()}
                   />
                 </FormControl>
                 <FormMessage />
@@ -68,7 +76,7 @@ export default function GlForm({
             name="endDate"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Date</FormLabel>
+                <FormLabel>To</FormLabel>
                 <FormControl className="w-full">
                   <DatePicker
                     onSelect={field.onChange}
@@ -76,8 +84,8 @@ export default function GlForm({
                     fromDate={form.watch("startDate")}
                     defaultMonth={form.watch("startDate")}
                     defaultYear={form.watch("startDate")}
-                    fromYear={new Date(form.watch("startDate")).getFullYear()} 
-                    toYear={new Date().getFullYear()} 
+                    fromYear={new Date(form.watch("startDate")).getFullYear()}
+                    toYear={new Date().getFullYear()}
                   />
                 </FormControl>
                 <FormMessage />
@@ -108,7 +116,7 @@ export default function GlForm({
                     ) : fundList.length > 0 ? (
                       fundList?.map((fund) => (
                         <SelectItem key={fund.No} value={fund.No}>
-                          {`${fund.No} ${fund.Name ? fund.Name : ''}`}
+                          {`${fund.No} ${fund.Name ? fund.Name : ""}`}
                         </SelectItem>
                       ))
                     ) : (
@@ -147,8 +155,11 @@ export default function GlForm({
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <ReloadIcon className="h-4 w-4 m-auto animate-spin" />
                       </div>
-                    ) : departmentList?.length > 0 ? (
-                      departmentList?.map((department) => (
+                    ) : (
+                      [
+                        { Code: "All", Name: "Departments" },
+                        ...departmentList,
+                      ]?.map((department) => (
                         <SelectItem
                           key={department?.Code}
                           value={department?.Code}
@@ -158,14 +169,6 @@ export default function GlForm({
                           }`}
                         </SelectItem>
                       ))
-                    ) : (
-                      <div className="w-full h-72 flex justify-center items-center m-auto">
-                        <p className="text-sm">
-                          {form.watch("fundNo")
-                            ? "Not Found"
-                            : "Select first Fund"}
-                        </p>
-                      </div>
                     )}
                   </SelectContent>
                 </Select>
@@ -185,6 +188,74 @@ export default function GlForm({
             )}
             Request
           </Button>
+          {data.value.length !== 0 ? (
+            data["@odata.count"] > data.value.length ? (
+              <Button
+                disabled={isFetchingNext}
+                type="button"
+                onClick={() => exportToPdf()}
+                className="relative h-9 text-sm self-end overflow-hidden"
+              >
+                <div
+                  className={`h-full max-w-full flex -z-10 justify-center items-center  absolute top-0 left-0 bg-green-300  transition-[width]`}
+                  style={{
+                    width: `${
+                      (data.value.length / data["@odata.count"]) * 100
+                    }%`,
+                  }}
+                ></div>
+                {isFetchingNext ? (
+                  <h1 className="text-white z-10 text-sm mx-3 text-center font-bold ">
+                    {
+                      +Number(
+                        (data.value.length / data["@odata.count"]) * 100
+                      ).toFixed(2)
+                    }
+                    %
+                  </h1>
+                ) : (
+                  "Fetch To Export"
+                )}
+              </Button>
+            ) : (
+              <ExportPdf
+                fileName="Budget-Vs-Actual"
+                document={
+                  <GLDocument
+                    data={data.value}
+                    fileName="GL-Details"
+                    fundName={`${
+                      fundList.find(
+                        (item) => +item.No === +form.watch("fundNo")
+                      )?.No
+                    }  ${
+                      fundList.find(
+                        (item) => +item.No === +form.watch("fundNo")
+                      )?.Name
+                    }`}
+                    departmentName={
+                      form.watch("departmentCode") === "All"
+                        ? "All Departments"
+                        : `${
+                            departmentList.find(
+                              (item) =>
+                                +item.Code === +form.watch("departmentCode")
+                            )?.Code
+                          }  ${
+                            departmentList.find(
+                              (item) =>
+                                +item.Code === +form.watch("departmentCode")
+                            )?.Name
+                          }`
+                    }
+                    postingDate={form.watch("endDate")}
+                  />
+                }
+              />
+            )
+          ) : (
+            <></>
+          )}
         </form>
       </Form>
     </div>

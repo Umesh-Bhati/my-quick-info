@@ -1,7 +1,7 @@
 "use client"
 import { fetchGl } from "@/components/forms/on-demand-reports/budget-vs-actual/action";
 import { fetchNextPageData } from "@/components/forms/on-demand-reports/gl-details/action";
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
 
 interface IGlArgs {
@@ -24,18 +24,24 @@ export default function useFetchGl() {
     const [data, setData] = useState<IData>({ value: [], "@odata.count": 0, "@odata.nextLink": "" })
     const [isLoading, setIsLoading] = useState(false)
     const [isFetchingNext, setIsFetchingNext] = useState(false)
-    const hasNextPage: boolean = useMemo(() => data["@odata.count"] > data.value.length, [data])
+    const hasNextPage = useRef({ lastLength: 0, totalCount: 0 })
     async function fetchGls(type: 'on-submit' | 'fetch-next', glFilters?: IGlArgs) {
         try {
+
             if (type === 'fetch-next') {
                 setIsFetchingNext(true)
-                if (hasNextPage) {
+                if (hasNextPage.current.totalCount > hasNextPage.current.lastLength) {
                     const responseNextPageData = await fetchNextPageData(data["@odata.nextLink"])
+                    hasNextPage.current.lastLength += responseNextPageData.value.length
                     setData(old => ({ ...responseNextPageData, value: [...old.value, ...responseNextPageData?.["value"]] }))
+
+                    return hasNextPage.current.totalCount > hasNextPage.current.lastLength
                 }
             } else if (type === 'on-submit') {
                 setIsLoading(true)
                 const responseData = await fetchGl(glFilters)
+                hasNextPage.current.lastLength = responseData.value.length
+                hasNextPage.current.totalCount = responseData["@odata.count"]
                 setData(responseData)
             }
         } catch (error) {
@@ -51,6 +57,6 @@ export default function useFetchGl() {
         isLoading,
         isFetchingNext,
         fetchGls,
-        hasNextPage
+        hasNextPage: hasNextPage.current.totalCount > hasNextPage.current.lastLength
     }
 }

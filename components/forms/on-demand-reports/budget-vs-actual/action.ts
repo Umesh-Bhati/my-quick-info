@@ -19,7 +19,7 @@ axiosInterceptorInstance.interceptors.request.use(
     if (accessToken) {
       if (config.headers) {
         config.headers.Authorization = `Bearer ${accessToken}`;
-        config.headers["Prefer"] = "odata.maxpagesize=100";
+        config.headers["Prefer"] = "odata.maxpagesize=200";
       }
     }
     return config;
@@ -95,7 +95,7 @@ export const fetchGl = async ({
       } and Posting_Date le ${format(
         endDate,
         "yyyy-MM-dd"
-      )} and Fund_No_NVG eq \'${fundNo}\' and Global_Dimension_1_Code eq \'${departmentCode}\' ${transactionType ? `and Transaction_Type_NVG eq \'${transactionType}\'` : ""
+      )} and Fund_No_NVG eq \'${fundNo}\' ${departmentCode === "All" ? "" : `and Global_Dimension_1_Code eq \'${departmentCode}\' `}${transactionType ? ` and Transaction_Type_NVG eq \'${transactionType}\'` : ""
       } &$count=true`
     );
 

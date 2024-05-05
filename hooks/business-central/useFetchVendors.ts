@@ -38,9 +38,8 @@ export default function useFetchVendors() {
             } else if (type === 'on-submit') {
                 setIsLoading(true)
                 const responseData = await fetchApi(vendorFilters)
-                console.log("responseData ",responseData)
                 if (responseData?.value && responseData.value.length > 0) {
-                   return setData(responseData)
+                    return setData(responseData)
                 }
                 setData({ value: [], "@odata.count": 0, "@odata.nextLink": '' })
             }

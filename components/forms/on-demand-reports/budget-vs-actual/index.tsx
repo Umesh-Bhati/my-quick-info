@@ -18,6 +18,8 @@ import {
 } from "../../../ui/select";
 import { DatePicker } from "../../../DatePicker";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import ExportPdf from "@/components/exports/ExportPdf";
+import BudgetVsActual from "@/components/exports/BudgetVsActual";
 
 export interface IBugdet {
   isDepartmentLoading: boolean;
@@ -27,6 +29,9 @@ export interface IBugdet {
   form: any;
   fundList: any[];
   departmentList: any[];
+  data: any;
+  isFetchingNext: boolean;
+  exportToPdf: () => void;
 }
 
 export default function BugdetForm({
@@ -37,6 +42,9 @@ export default function BugdetForm({
   fundList,
   departmentList,
   onSubmit,
+  data,
+  isFetchingNext,
+  exportToPdf,
 }: IBugdet) {
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
@@ -57,8 +65,8 @@ export default function BugdetForm({
                     selected={field.value}
                     defaultMonth={field.value}
                     defaultYear={field.value}
-                    fromYear={2015} 
-                    toYear={new Date().getFullYear()} 
+                    fromYear={2015}
+                    toYear={new Date().getFullYear()}
                   />
                 </FormControl>
                 <FormMessage />
@@ -128,8 +136,11 @@ export default function BugdetForm({
                       <div className="w-full h-72 flex justify-center items-center m-auto">
                         <ReloadIcon className="h-4 w-4 m-auto animate-spin" />
                       </div>
-                    ) : departmentList?.length > 0 ? (
-                      departmentList?.map((department) => (
+                    ) : (
+                      [
+                        { Code: "All", Name: "Departments" },
+                        ...departmentList,
+                      ]?.map((department) => (
                         <SelectItem
                           key={department?.Code}
                           value={department?.Code}
@@ -139,14 +150,6 @@ export default function BugdetForm({
                           }`}
                         </SelectItem>
                       ))
-                    ) : (
-                      <div className="w-full h-72 flex justify-center items-center m-auto">
-                        <p className="text-sm">
-                          {form.watch("fundNo")
-                            ? "Not Found"
-                            : "Select first Fund"}
-                        </p>
-                      </div>
                     )}
                   </SelectContent>
                 </Select>
@@ -166,6 +169,74 @@ export default function BugdetForm({
             )}
             Request
           </Button>
+          {data.value.length !== 0 ? (
+            data["@odata.count"] > data.value.length ? (
+              <Button
+                disabled={isFetchingNext}
+                type="button"
+                onClick={() => exportToPdf()}
+                className="relative h-9 text-sm self-end overflow-hidden"
+              >
+                <div
+                  className={`h-full max-w-full flex -z-10  justify-center items-center  absolute top-0 left-0 bg-green-300  transition-[width]`}
+                  style={{
+                    width: `${
+                      (data.value.length / data["@odata.count"]) * 100
+                    }%`,
+                  }}
+                />
+                {isFetchingNext ? (
+                  <h1 className="text-white z-10 text-sm mx-3 text-center font-bold ">
+                    {
+                      +Number(
+                        (data.value.length / data["@odata.count"]) * 100
+                      ).toFixed(2)
+                    }
+                    %
+                  </h1>
+                ) : (
+                  "Fetch To Export"
+                )}
+              </Button>
+            ) : (
+              <ExportPdf
+                fileName="Budget-Vs-Actual"
+                document={
+                  <BudgetVsActual
+                    data={data.value}
+                    reportType="Budget Vs Actual"
+                    fundName={`${
+                      fundList.find(
+                        (item) => +item.No === +form.watch("fundNo")
+                      )?.No
+                    } ${
+                      fundList.find(
+                        (item) => +item.No === +form.watch("fundNo")
+                      )?.Name
+                    }`}
+                    departmentName={
+                      form.watch("departmentCode") === "All"
+                        ? "All Departments"
+                        : `${
+                            departmentList.find(
+                              (item) =>
+                                +item.Code === +form.watch("departmentCode")
+                            )?.Code
+                          } " " ${
+                            departmentList.find(
+                              (item) =>
+                                +item.Code === +form.watch("departmentCode")
+                            )?.Name
+                          }`
+                    }
+                    postingDate={form.watch("endDate")}
+                  />
+                }
+              />
+            )
+          ) : (
+            <></>
+          )}
         </form>
       </Form>
     </div>
