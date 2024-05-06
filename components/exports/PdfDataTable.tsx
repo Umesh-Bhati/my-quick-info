@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Text, View, StyleSheet } from "@react-pdf/renderer";
 
 interface ColumnDef<TData> {
@@ -8,7 +8,7 @@ interface ColumnDef<TData> {
 }
 
 interface PdfDataTableProps<TData> {
-  columns: ColumnDef<TData>[];
+  columns: any;
   data: TData[];
 }
 
@@ -33,7 +33,7 @@ const PdfDataTable = <TData,>({ columns, data }: PdfDataTableProps<TData>) => {
       </View>
       {data.map((row: any, rowIndex: number) => (
         <View key={rowIndex} style={styles.tableRow}>
-          {columns.map((column: any, i) => {
+          {columns.map((column: any, i: number) => {
             const width = column.width || `${100 / columns.length}%`;
             return (
               <View
@@ -57,7 +57,7 @@ const PdfDataTable = <TData,>({ columns, data }: PdfDataTableProps<TData>) => {
   );
 };
 
-export default PdfDataTable;
+export default memo(PdfDataTable);
 const styles = StyleSheet.create({
   table: {
     width: "100%",

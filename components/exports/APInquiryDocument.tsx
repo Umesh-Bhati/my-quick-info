@@ -3,8 +3,9 @@ import PdfDataTable from "./PdfDataTable";
 import PdfFooter from "./PdfFooter";
 import PdfHeader from "./PdfHeader";
 import { columns } from "../tables/ap-inquiry/columns";
+import { memo } from "react";
 
-export default function APInquiryDocument({ data = [], ...headerProps }: any) {
+function APInquiryDocument({ data = [], ...headerProps }: any) {
   if (data?.length > 0) {
     return (
       <Document>
@@ -25,3 +26,5 @@ export default function APInquiryDocument({ data = [], ...headerProps }: any) {
     return;
   }
 }
+
+export default memo(APInquiryDocument);

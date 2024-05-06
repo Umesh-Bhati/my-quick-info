@@ -4,8 +4,9 @@ import PdfDataTable from "./PdfDataTable";
 import PdfFooter from "./PdfFooter";
 import { calTotalOfGlTable } from "@/lib/utils";
 import PdfHeader from "./PdfHeader";
+import { memo } from "react";
 
-export default function GLDocument({ data = [], ...headerProps }: any) {
+function GLDocument({ data = [], ...headerProps }: any) {
   if (data?.length > 0) {
     return (
       <Document>
@@ -34,3 +35,5 @@ export default function GLDocument({ data = [], ...headerProps }: any) {
     return;
   }
 }
+
+export default memo(GLDocument);
