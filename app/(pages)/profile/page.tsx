@@ -8,8 +8,8 @@ interface IPageProps {
   searchParams: Record<string, string | undefined>;
 }
 
-export default async function ProfilePage(query:IPageProps) {
-  let email:any = await query?.searchParams?.email;
+export default async function ProfilePage(query: IPageProps) {
+  let email: any = await query?.searchParams?.email;
   const isMe = !email;
   if (!email) {
     const res = await getServerSession();
@@ -20,12 +20,7 @@ export default async function ProfilePage(query:IPageProps) {
 
   return (
     <section className="min-h-screen min-w-screen flex justify-center items-center">
-      <ProfileForm
-        isMe={isMe}
-        email={email}
-        firstName={usersFormData?.name}
-        lastName={usersFormData?.last_name}
-      />
+      <ProfileForm isMe={isMe} {...usersFormData} />
     </section>
   );
 }

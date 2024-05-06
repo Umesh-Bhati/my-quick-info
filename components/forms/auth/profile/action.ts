@@ -1,3 +1,4 @@
+"use server"
 import { prisma } from "@/app/api/db"
 
 export const updateProfile = async ({ email, ...updateData }: any) => {

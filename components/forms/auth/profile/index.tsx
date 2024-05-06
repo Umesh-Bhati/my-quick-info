@@ -29,28 +29,26 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@radix-ui/react-label";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { ScopeManagmentBtn } from "./ScopeManagmentBtn";
 
 const formSchema = z.object({
   email: z.string().email({
     message: "Email must be a valid email address.",
   }),
-  firstName: z.string().min(2, {
+  name: z.string().min(2, {
     message: "minimum two characters required",
   }),
-  lastName: z.string().min(2, {
+  last_name: z.string().min(2, {
     message: "minimum two characters required",
   }),
+  is_admin: z.boolean(),
 });
 
-export function ProfileForm({ email, firstName, lastName, isMe = false }: any) {
+export function ProfileForm({ isMe = false, ...defaultValues }: any) {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email,
-      firstName,
-      lastName,
-    },
+    defaultValues,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -59,11 +57,7 @@ export function ProfileForm({ email, firstName, lastName, isMe = false }: any) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      const response = await updateProfile({
-        ...values,
-        name: values.firstName,
-        last_name: lastName,
-      });
+      const response = await updateProfile(values);
 
       if (response?.error)
         return form.setError("root", {
@@ -85,24 +79,27 @@ export function ProfileForm({ email, firstName, lastName, isMe = false }: any) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="w-full min-w-[75vw] m-auto max-w-3xl">
-          <CardHeader>
-            <CardTitle>{isMe ? "My" : firstName} Profile</CardTitle>
-            <CardDescription>
-              Update {isMe ? "your" : firstName} profile information.
-            </CardDescription>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="edit-profile"
-                onCheckedChange={() => setdisabled((old) => !old)}
-              />
-              <Label htmlFor="edit-profile">Edit</Label>
+          <CardHeader className="flex flex-row justify-between" >
+            <div>
+              <CardTitle>{isMe ? "My" : defaultValues.name} Profile</CardTitle>
+              <CardDescription>
+                Update {isMe ? "your" : defaultValues.name} profile information.
+              </CardDescription>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="edit-profile"
+                  onCheckedChange={() => setdisabled((old) => !old)}
+                />
+                <Label htmlFor="edit-profile">Edit</Label>
+              </div>
             </div>
+            {/* <ScopeManagmentBtn /> */}
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="firstName"
+                name="name"
                 disabled={disabled}
                 render={({ field }) => (
                   <FormItem>
@@ -117,7 +114,7 @@ export function ProfileForm({ email, firstName, lastName, isMe = false }: any) {
               <FormField
                 control={form.control}
                 disabled={disabled}
-                name="lastName"
+                name="last_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
@@ -143,6 +140,26 @@ export function ProfileForm({ email, firstName, lastName, isMe = false }: any) {
                       />
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="is_admin"
+                disabled={disabled}
+                render={({ field }) => (
+                  <FormItem className="flex mt-8 flex-row  w-fit items-center space-y-0 gap-5">
+                    <FormControl className="items-center w-fit justify-center">
+                      <Input
+                        type="checkbox"
+                        className="border w-4 h-4"
+                        {...field}
+                        checked={field.value}
+                        value={"isAdmin"}
+                      />
+                    </FormControl>
+                    <FormLabel className="w-fit">isAdmin</FormLabel>
                   </FormItem>
                 )}
               />

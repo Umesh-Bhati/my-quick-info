@@ -37,7 +37,7 @@ export const columns: ColumnDef<VendorType>[] = [
     header: "Vendor No",
   },
   {
-    accessorKey: "Vendor_Name",
+    accessorKey: "Description",
     header: "Vendor Name",
   },
   {
