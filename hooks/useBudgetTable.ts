@@ -27,7 +27,6 @@ export default function useBudgetTable() {
         try {
             if (others.hasNextPage) {
                 const hasNext = await fetchGls('fetch-next')
-                console.log("called ", hasNext, others.hasNextPage)
                 if (hasNext) await exportToPdf()
                 return
             }

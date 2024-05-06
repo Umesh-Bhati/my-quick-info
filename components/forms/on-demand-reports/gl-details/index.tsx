@@ -214,16 +214,16 @@ export default function GlForm({
                     %
                   </h1>
                 ) : (
-                  "Fetch To Export"
+                  "Download To Export"
                 )}
               </Button>
             ) : (
               <ExportPdf
-                fileName="Budget-Vs-Actual"
+                fileName="GL-Details"
                 document={
                   <GLDocument
                     data={data.value}
-                    fileName="GL-Details"
+                    reportType="GL Details"
                     fundName={`${
                       fundList.find(
                         (item) => +item.No === +form.watch("fundNo")
@@ -248,7 +248,8 @@ export default function GlForm({
                             )?.Name
                           }`
                     }
-                    postingDate={form.watch("endDate")}
+                    toDate={form.watch("endDate")}
+                    fromDate={form.watch("startDate")}
                   />
                 }
               />

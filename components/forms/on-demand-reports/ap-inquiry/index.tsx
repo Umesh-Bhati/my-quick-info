@@ -19,17 +19,25 @@ import {
 import { DatePicker } from "../../../DatePicker";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
+import ExportPdf from "@/components/exports/ExportPdf";
+import APInquiryDocument from "@/components/exports/APInquiryDocument";
 
 export interface IApInquiryForm {
   isReqLoading?: boolean;
   onSubmit?: HTMLFormElement["onsubmit"];
   form?: any;
+  exportToPdf: () => void;
+  isFetchingNext?: boolean;
+  data: any;
 }
 
 export default function ApInquiryForm({
   form,
   isReqLoading,
   onSubmit,
+  exportToPdf,
+  isFetchingNext,
+  data,
 }: IApInquiryForm) {
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
@@ -184,6 +192,56 @@ export default function ApInquiryForm({
             )}
             Request
           </Button>
+          {data.value.length !== 0 ? (
+            data["@odata.count"] > data.value.length ? (
+              <Button
+                disabled={isFetchingNext}
+                type="button"
+                onClick={() => exportToPdf()}
+                className="relative h-9 text-sm self-end overflow-hidden"
+              >
+                <div
+                  className={`h-full max-w-full flex -z-10 justify-center items-center  absolute top-0 left-0 bg-green-300  transition-[width]`}
+                  style={{
+                    width: `${
+                      (data.value.length / data["@odata.count"]) * 100
+                    }%`,
+                  }}
+                ></div>
+                {isFetchingNext ? (
+                  <h1 className="text-white z-10 text-sm mx-3 text-center font-bold ">
+                    {
+                      +Number(
+                        (data.value.length / data["@odata.count"]) * 100
+                      ).toFixed(2)
+                    }
+                    %
+                  </h1>
+                ) : (
+                  "Download To Export"
+                )}
+              </Button>
+            ) : (
+              <ExportPdf
+                fileName="Ap-Inquiry"
+                document={
+                  <APInquiryDocument
+                    data={data.value}
+                    reportType="Ap Inquiry"
+                    toDate={form.watch("endDate")}
+                    fromDate={form.watch("startDate")}
+                    documentType={form.watch("Document_Type") || "All"}
+                    vendorNo={form.watch("Vendor_No")}
+                    vendorName={form.watch("Vendor_Name")}
+                    description={form.watch("Description")}
+                    documentNo={form.watch("Document_No")}
+                  />
+                }
+              />
+            )
+          ) : (
+            <></>
+          )}
         </form>
       </Form>
     </div>

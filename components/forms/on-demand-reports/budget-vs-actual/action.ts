@@ -19,7 +19,7 @@ axiosInterceptorInstance.interceptors.request.use(
     if (accessToken) {
       if (config.headers) {
         config.headers.Authorization = `Bearer ${accessToken}`;
-        config.headers["Prefer"] = "odata.maxpagesize=200";
+        config.headers["Prefer"] = "odata.maxpagesize=500";
       }
     }
     return config;

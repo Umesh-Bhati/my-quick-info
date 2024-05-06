@@ -13,7 +13,7 @@ export default function GLDocument({ data = [], ...headerProps }: any) {
           size="A4"
           style={{
             flexDirection: "column",
-            padding: 5,
+            padding: 10,
           }}
         >
           <PdfHeader {...headerProps} />
