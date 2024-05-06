@@ -10,6 +10,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -84,6 +85,7 @@ export function ForgetPasswordForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input autoComplete="email" placeholder="Email" {...field} />
               </FormControl>
@@ -96,8 +98,10 @@ export function ForgetPasswordForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
+                  variant="password"
                   autoComplete="current-password"
                   placeholder="New password"
                   {...field}
@@ -112,8 +116,10 @@ export function ForgetPasswordForm() {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <Input
+                  variant="password"
                   autoComplete="current-password"
                   placeholder="Confirm password"
                   {...field}

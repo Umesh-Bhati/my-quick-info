@@ -17,17 +17,25 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const formSchema = z.object({
-  name: z.string(),
-  last_name: z.string(),
-  is_admin: z.boolean().default(false),
-  email: z.string().email({
-    message: "Email must be a valid email address.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
+const formSchema = z
+  .object({
+    name: z.string(),
+    last_name: z.string(),
+    is_admin: z.boolean().default(false),
+    email: z.string().email({
+      message: "Email must be a valid email address.",
+    }),
+    password: z.string().min(8, {
+      message: "Password must be at least 8 characters.",
+    }),
+    confirmPassword: z.string().min(8, {
+      message: "Password must be at least 8 characters.",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match!",
+    path: ["confirmPassword"],
+  });
 
 export default function CreateUserForm() {
   const { toast } = useToast();
@@ -40,6 +48,7 @@ export default function CreateUserForm() {
       is_admin: false,
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -122,11 +131,29 @@ export default function CreateUserForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
-
               <FormControl>
                 <Input
+                  variant="password"
                   autoComplete="current-password"
                   placeholder="Password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input
+                  variant="password"
+                  autoComplete="current-password"
+                  placeholder="Confirm Password"
                   {...field}
                 />
               </FormControl>
