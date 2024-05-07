@@ -29,7 +29,7 @@ axiosInterceptorInstance.interceptors.request.use(
 
 
 
-export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description }: any) => {
+export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description, Document_No }: any) => {
     try {
         let query = "Vendor_Ledger_Entries_Excel?$filter="
         if (startDate) {
@@ -39,13 +39,16 @@ export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Typ
             query += `Posting_Date le ${format(endDate, "yyyy-MM-dd")} and `
         }
         if (Vendor_Name) {
-            query += `Vendor_Name eq \`${Vendor_Name}\` and `
+            query += `Description eq \'${Vendor_Name}\' and `
         }
         if (Vendor_No) {
-            query += `Vendor_No eq \'${Vendor_No}\' and `
+            query += `Vendor_No eq ${Vendor_No} and `
         }
         if (Document_Type) {
             query += `Document_Type eq \'${Document_Type}\' and `
+        }
+        if (Document_No) {
+            query += `Document_No eq \'${Document_No}\' and `
         }
         if (Description) {
             query += `Description eq \'${Description}\' and `
@@ -57,7 +60,9 @@ export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Typ
         const { data } = await axiosInterceptorInstance.get(
             `${query}&$count=true`,
         );
-
+        console.log("query ", query)
+        console.log("Vendor_Name ", Vendor_Name)
+        // console.log("data ", data)
         if (data?.value && data.value.length > 0) {
             return data;
         }
