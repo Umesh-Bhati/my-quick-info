@@ -1,12 +1,16 @@
 import { endOfDay, startOfMonth } from "date-fns";
 
-const fixedDecimal = (decimal: number): number =>
+export const fixedDecimal = (decimal: number): number =>
   Number.isInteger(decimal) ? decimal : +Number(decimal).toFixed(2);
 
 const budgetTable = (data: any[], postingDate: string | Date) => {
   const startOfPostingMonth = startOfMonth(postingDate);
   const endOfPostingDate = endOfDay(postingDate);
-  let total = 0;
+  let totalYtd = 0;
+  let openPurchOrdTotal = 0
+  let openReqTotal = 0
+  let totalMtd = 0
+  let totalBudget = 0
   let lastItemOccurence: any;
   let formatedObj = {
     mtd: 0,
@@ -30,9 +34,14 @@ const budgetTable = (data: any[], postingDate: string | Date) => {
       if (lastItemOccurence !== item["G_L_Account_No"]) {
         finalResponse.push({ ...lastItem, ...formatedObj });
         if (!isRevenueCal && +lastItemOccurence?.toString()[0] === 4 && +item["G_L_Account_No"]?.toString()[0] !== 4) {
-          finalResponse.push({ ytd: total, desc: "Revenue" });
+
+          finalResponse.push({ ytd: totalYtd, mtd: totalMtd, budget: totalBudget, openReq: openReqTotal, openPurchOrd: openPurchOrdTotal, desc: "Revenue" });
           isRevenueCal = true;
-          total = 0;
+          totalYtd = 0;
+          openPurchOrdTotal = 0
+          openReqTotal = 0
+          totalMtd = 0
+          totalBudget = 0
         }
         lastItemOccurence = item["G_L_Account_No"];
         formatedObj = {
@@ -45,7 +54,6 @@ const budgetTable = (data: any[], postingDate: string | Date) => {
       }
       if (lastItemOccurence === item["G_L_Account_No"]) {
         const { Amount = 0 } = item;
-        total = fixedDecimal(total + Amount);
         lastItem = item;
         switch (item.Transaction_Type_NVG) {
           case "Actual": {
@@ -54,19 +62,27 @@ const budgetTable = (data: any[], postingDate: string | Date) => {
               new Date(item.Posting_Date) <= endOfPostingDate
             ) {
               formatedObj["mtd"] = fixedDecimal(+formatedObj["mtd"] + +Amount);
+              totalMtd = fixedDecimal(+totalMtd + +Amount)
             }
             formatedObj["ytd"] = fixedDecimal(+formatedObj["ytd"] + +Amount);
+            totalYtd = fixedDecimal(+totalYtd + +Amount)
             break;
           }
           case "Encumbrance": {
             formatedObj["openPurchOrd"] = fixedDecimal(
               +formatedObj["openPurchOrd"] + +Amount
             );
+            openPurchOrdTotal = fixedDecimal(
+              +openPurchOrdTotal + +Amount
+            )
             break;
           }
           case "Commitment": {
             formatedObj["openReq"] = fixedDecimal(
               +formatedObj["openReq"] + +Amount
+            );
+            openReqTotal = fixedDecimal(
+              +openReqTotal + +Amount
             );
             break;
           }
@@ -74,13 +90,16 @@ const budgetTable = (data: any[], postingDate: string | Date) => {
             formatedObj["budget"] = fixedDecimal(
               +formatedObj["budget"] + +Amount
             );
+            totalBudget = fixedDecimal(
+              +totalBudget + +Amount
+            );
             break;
           }
         }
         if (index === data.length - 1) {
           finalResponse.push(
             { ...item, ...formatedObj },
-            { ytd: total, desc: "Expense" }
+            { ytd: totalYtd, mtd: totalMtd, budget: totalBudget, openReq: openReqTotal, openPurchOrd: openPurchOrdTotal, desc: "Expenses" }
           );
         }
       }

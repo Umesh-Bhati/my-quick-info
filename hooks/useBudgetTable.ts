@@ -20,7 +20,7 @@ export default function useBudgetTable() {
     });
     const { fetchGls, ...others } = useFetchGl()
     const onSubmit = async (values: any) => {
-        fetchGls('on-submit', values);
+        fetchGls('on-submit', { ...values, isBudgetVsActual: true });
     };
 
     const exportToPdf = async () => {

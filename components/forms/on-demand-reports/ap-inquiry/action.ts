@@ -30,7 +30,6 @@ axiosInterceptorInstance.interceptors.request.use(
 
 
 export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description }: any) => {
-    console.log("{ startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description }", { startDate, endDate, Vendor_No, Document_Type, Vendor_Name, Description })
     try {
         let query = "Vendor_Ledger_Entries_Excel?$filter="
         if (startDate) {

@@ -24,7 +24,7 @@ export default function ExportPdf({ document, fileName }: any) {
         }}
       >
         {({ blob, url, loading, error }) =>
-          loading ? "Loading Document..." : "Export Pdf"
+          loading ? "Loading Document..." : "Export PDF"
         }
       </PDFDownloadLink>
     </div>

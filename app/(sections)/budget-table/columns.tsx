@@ -1,11 +1,13 @@
 "use client";
 
+import { fixedDecimal } from "@/lib/response-formatter/business-central";
 import { StyleSheet, Text } from "@react-pdf/renderer";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type Budget = {
   id: string;
   G_L_Account_No: string;
+  G_L_Account_Name: string;
   Description: string;
   mtd: string;
   ytd: string;
@@ -22,8 +24,8 @@ export const columns: ColumnDef<Budget>[] = [
     header: "GL Account",
   },
   {
-    accessorKey: "Description",
-    header: "Description",
+    accessorKey: "G_L_Account_Name",
+    header: "G/L Account Name",
     cell: ({ row }) =>
       row.original?.desc ? (
         <h1 className="text-primary-forground text-sm font-bold">
@@ -36,6 +38,14 @@ export const columns: ColumnDef<Budget>[] = [
   {
     accessorKey: "mtd",
     header: "MTD",
+    cell: ({ row }) =>
+      row.original?.desc ? (
+        <h1 className="text-primary-forground text-sm font-bold">
+          {row.original.mtd}
+        </h1>
+      ) : (
+        row.original.mtd
+      ),
   },
   {
     accessorKey: "ytd",
@@ -52,14 +62,54 @@ export const columns: ColumnDef<Budget>[] = [
   {
     accessorKey: "openPurchOrd",
     header: "Open Purch Ord",
+    cell: ({ row }) =>
+      row.original?.desc ? (
+        <h1 className="text-primary-forground text-sm font-bold">
+          {row.original.openPurchOrd}
+        </h1>
+      ) : (
+        row.original.openPurchOrd
+      ),
   },
   {
     accessorKey: "openReq",
     header: "Open Req",
+    cell: ({ row }) =>
+      row.original?.desc ? (
+        <h1 className="text-primary-forground text-sm font-bold">
+          {row.original.openReq}
+        </h1>
+      ) : (
+        row.original.openReq
+      ),
   },
   {
     accessorKey: "budget",
     header: "Budget",
+    cell: ({ row }) =>
+      row.original?.desc ? (
+        <h1 className="text-primary-forground text-sm font-bold">
+          {row.original.budget}
+        </h1>
+      ) : (
+        row.original.budget
+      ),
+  },
+  {
+    accessorKey: "budget",
+    header: "Available",
+    cell: ({
+      row: {
+        original: { ytd, openPurchOrd, openReq, budget, desc },
+      },
+    }) =>
+      desc ? (
+        <h1 className="text-primary-forground text-sm font-bold">
+          {fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)}
+        </h1>
+      ) : (
+        fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)
+      ),
   },
 ];
 export const pdfColumns: ColumnDef<Budget>[] = [
@@ -68,8 +118,8 @@ export const pdfColumns: ColumnDef<Budget>[] = [
     header: "GL Account",
   },
   {
-    accessorKey: "Description",
-    header: "Description",
+    accessorKey: "G_L_Account_Name",
+    header: "G/L Account Name",
     cell: (row: any) =>
       row.desc ? (
         <Text style={styles.boldTxt}>Total: {row.desc}</Text>
@@ -94,14 +144,46 @@ export const pdfColumns: ColumnDef<Budget>[] = [
   {
     accessorKey: "openPurchOrd",
     header: "Open Purch Ord",
+    cell: (row: any) =>
+      row.desc ? (
+        <Text style={styles.boldTxt}> {row.ytd}</Text>
+      ) : (
+        <Text style={styles.cellTxt}> {row.ytd}</Text>
+      ),
   },
   {
     accessorKey: "openReq",
     header: "Open Req",
+    cell: (row: any) =>
+      row.desc ? (
+        <Text style={styles.boldTxt}> {row.openReq}</Text>
+      ) : (
+        <Text style={styles.cellTxt}> {row.openReq}</Text>
+      ),
   },
   {
     accessorKey: "budget",
     header: "Budget",
+    cell: (row: any) =>
+      row.desc ? (
+        <Text style={styles.boldTxt}> {row.budget}</Text>
+      ) : (
+        <Text style={styles.cellTxt}> {row.budget}</Text>
+      ),
+  },
+  {
+    accessorKey: "budget",
+    header: "Available",
+    cell: ({ budget, ytd, openPurchOrd, openReq, desc }: any) =>
+      desc ? (
+        <Text style={styles.boldTxt}>
+          {fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)}
+        </Text>
+      ) : (
+        <Text style={styles.cellTxt}>
+          {fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)}
+        </Text>
+      ),
   },
 ];
 
