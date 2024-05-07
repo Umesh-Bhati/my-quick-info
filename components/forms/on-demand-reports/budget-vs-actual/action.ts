@@ -116,10 +116,6 @@ export const fetchGl = async ({
       } &$count=true`
     );
 
-    console.log("data ", data)
-    console.log("fullquery ", `${query} and Fund_No_NVG eq \'${fundNo}\' ${departmentCode === "All" ? "" : `and Global_Dimension_1_Code eq \'${departmentCode}\' `}${transactionType ? ` and Transaction_Type_NVG eq \'${transactionType}\'` : ""
-  } &$count=true`)
-
     return data;
   } catch (error) {
     console.error("getBudgetTable ", error);

@@ -60,9 +60,6 @@ export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Typ
         const { data } = await axiosInterceptorInstance.get(
             `${query}&$count=true`,
         );
-        console.log("query ", query)
-        console.log("Vendor_Name ", Vendor_Name)
-        // console.log("data ", data)
         if (data?.value && data.value.length > 0) {
             return data;
         }
