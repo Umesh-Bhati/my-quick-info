@@ -42,7 +42,7 @@ export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Typ
             query += `Description eq \'${Vendor_Name}\' and `
         }
         if (Vendor_No) {
-            query += `Vendor_No eq ${Vendor_No} and `
+            query += `Vendor_No eq \'${Vendor_No}\' and `
         }
         if (Document_Type) {
             query += `Document_Type eq \'${Document_Type}\' and `

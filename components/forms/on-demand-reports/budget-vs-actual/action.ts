@@ -19,7 +19,6 @@ axiosInterceptorInstance.interceptors.request.use(
     if (accessToken) {
       if (config.headers) {
         config.headers.Authorization = `Bearer ${accessToken}`;
-        config.headers["Prefer"] = "odata.maxpagesize=1000";
       }
     }
     return config;
@@ -86,36 +85,13 @@ export const fetchGl = async ({
   fundNo,
   departmentCode,
   transactionType,
-  isBudgetVsActual = false
 }: any) => {
-
   try {
-    let query = "General_Ledger_Entries_Excel?$filter=G_L_Account_No ge '400000' and G_L_Account_No le '90000' "
-    if (isBudgetVsActual) {
-      if (+fundNo >= 500) {
-        query += `and Posting_Date le ${format(
-          endDate,
-          "yyyy-MM-dd"
-        )}`
-      } else {
-        const month = new Date(endDate).getMonth()
-        const year = new Date(endDate).getFullYear()
-        const startFundDate = month >= 9 ? format(endDate, "yyyy-10-01") : format(endDate, `${year - 1}-10-01`)
-        query += ` and Posting_Date ge ${startFundDate} and Posting_Date le ${format(
-          endDate,
-          "yyyy-MM-dd"
-        )}`
-      }
-    } else {
-      query += ` and Posting_Date ge ${format(startDate, 'yyyy-MM-dd')} and Posting_Date le ${format(endDate, 'yyyy-MM-dd')}`
-    }
-
-
+    let query = `General_Ledger_Entries_Excel?$filter=G_L_Account_No ge '400000' and G_L_Account_No le '999999'  ${startDate ? `and Posting_Date ge ${format(startDate, 'yyyy-MM-dd')}` : ''} and Posting_Date le ${format(endDate, 'yyyy-MM-dd')}`
     const { data } = await axiosInterceptorInstance.get(
-      `${query} and Fund_No_NVG eq \'${fundNo}\' ${departmentCode === "All" ? "" : `and Global_Dimension_1_Code eq \'${departmentCode}\' `}${transactionType ? ` and Transaction_Type_NVG eq \'${transactionType}\'` : ""
+      `${query} and Fund_No_NVG eq \'${fundNo}\' ${departmentCode === "All" ? '' : `and Global_Dimension_1_Code eq \'${departmentCode}\' `}${transactionType ? ` and Transaction_Type_NVG eq \'${transactionType}\'` : ""
       } &$count=true`
     );
-
     return data;
   } catch (error) {
     console.error("getBudgetTable ", error);

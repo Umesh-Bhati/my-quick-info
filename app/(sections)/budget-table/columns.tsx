@@ -32,7 +32,7 @@ export const columns: ColumnDef<Budget>[] = [
           Total: {row.original.desc}
         </h1>
       ) : (
-        row.original.Description
+        row.original.G_L_Account_Name
       ),
   },
   {
@@ -124,7 +124,7 @@ export const pdfColumns: ColumnDef<Budget>[] = [
       row.desc ? (
         <Text style={styles.boldTxt}>Total: {row.desc}</Text>
       ) : (
-        <Text style={styles.cellTxt}> {row.Description}</Text>
+        <Text style={styles.cellTxt}> {row.G_L_Account_Name}</Text>
       ),
   },
   {
@@ -189,7 +189,7 @@ export const pdfColumns: ColumnDef<Budget>[] = [
 
 const styles = StyleSheet.create({
   cellTxt: {
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 8,
     fontWeight: "normal",
   },

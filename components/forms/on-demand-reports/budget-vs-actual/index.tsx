@@ -230,6 +230,7 @@ export default function BugdetForm({
                           }`
                     }
                     postingDate={form.watch("endDate")}
+                    fundNo = {form.watch("fundNo")}
                   />
                 }
               />

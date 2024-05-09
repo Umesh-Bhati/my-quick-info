@@ -40,8 +40,9 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
   const { rows } = table.getRowModel();
+
   const containerRef = useBottomScrollListener<any>(
-    useCallback(!!fetchNextPage ? fetchNextPage : () => {}, [hasNextPage])
+    !!fetchNextPage ? fetchNextPage : () => {}
   );
 
   return (
@@ -64,7 +65,7 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
-                    className="text-sm text-center  font-bold"
+                    className="text-sm text-left  font-bold"
                     key={header.id}
                   >
                     {header.isPlaceholder
@@ -87,7 +88,7 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell className="text-center border-r " key={cell.id}>
+                  <TableCell className="text-left border-r " key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

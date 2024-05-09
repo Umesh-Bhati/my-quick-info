@@ -115,7 +115,7 @@ export const pdfColumns = [
 
 const styles = StyleSheet.create({
   cellTxt: {
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 8,
     fontWeight: "normal",
   },

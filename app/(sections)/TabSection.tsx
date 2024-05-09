@@ -28,10 +28,16 @@ export default function TabSection() {
 
   return (
     <Tabs defaultValue="budgetVsActual">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="budgetVsActual">Budget vs Actual</TabsTrigger>
-        <TabsTrigger value="glDetails">GL Detail</TabsTrigger>
-        <TabsTrigger value="apInquiry">AP Inquiry</TabsTrigger>
+      <TabsList className="grid w-full items-center py-[6px]  justify-center grid-cols-3">
+        <TabsTrigger className="w-52 self-center  m-auto" value="budgetVsActual">
+          Budget vs Actual
+        </TabsTrigger>
+        <TabsTrigger className="w-52 self-center  m-auto" value="glDetails">
+          GL Detail
+        </TabsTrigger>
+        <TabsTrigger className="w-52 self-center  m-auto" value="apInquiry">
+          AP Inquiry
+        </TabsTrigger>
       </TabsList>
       <TabsContent className={"flex  flex-col"} value="budgetVsActual">
         <BugdetForm
@@ -50,7 +56,8 @@ export default function TabSection() {
           {...budgetController}
           data={bcTableFormatters.budgetTable(
             budgetController.data.value,
-            budgetController.form.watch("endDate")
+            budgetController.form.watch("endDate"),
+            budgetController.form.watch("fundNo")
           )}
         />
       </TabsContent>

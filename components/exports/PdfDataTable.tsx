@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     borderRight: 0.5,
   },
   cellTxt: {
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 8,
   },
 });
