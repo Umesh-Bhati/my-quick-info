@@ -92,7 +92,7 @@ export const fetchGl = async ({
   try {
     let query = "General_Ledger_Entries_Excel?$filter=G_L_Account_No ge '400000' and G_L_Account_No le '90000' "
     if (isBudgetVsActual) {
-      if (+fundNo < 500) {
+      if (+fundNo >= 500) {
         query += `and Posting_Date le ${format(
           endDate,
           "yyyy-MM-dd"
