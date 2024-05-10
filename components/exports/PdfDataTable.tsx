@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     height: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     borderRight: 0.5,
     backgroundColor: "#103A84",
     borderColor: "white",
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     height: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     borderRight: 0.5,
   },
   cellTxt: {

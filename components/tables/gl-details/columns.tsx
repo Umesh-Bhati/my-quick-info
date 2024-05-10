@@ -55,23 +55,33 @@ export const columns: ColumnDef<GlDetail>[] = [
       row: {
         original: { total = 0, Amount, desc },
       },
-    }) => (
-      <h1
-        className={`${
-          desc
-            ? +total > 0
-            : +Amount > 0
-            ? desc
-              ? "text-green-600"
-              : "text-green-500"
-            : desc
-            ? "text-red-600"
-            : "text-red-500"
-        } text-primary-forground text-sm font-semiBold`}
-      >
-        {desc ? +total : Amount}
-      </h1>
-    ),
+    }) => {
+      return desc ? (
+        <h1
+          className={`${
+            +total !== 0
+              ? +total > 0
+                ? "text-green-600"
+                : "text-red-600"
+              : ""
+          } text-primary-forground text-sm font-semiBold`}
+        >
+          {total}
+        </h1>
+      ) : (
+        <h1
+          className={`${
+            +Amount !== 0
+              ? +Amount > 0
+                ? "text-green-500"
+                : "text-red-500"
+              : " "
+          } text-primary-forground text-sm `}
+        >
+          {Amount}
+        </h1>
+      );
+    },
   },
 ];
 

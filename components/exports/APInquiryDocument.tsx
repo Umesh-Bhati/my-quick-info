@@ -2,7 +2,7 @@ import { Document, Page } from "@react-pdf/renderer";
 import PdfDataTable from "./PdfDataTable";
 import PdfFooter from "./PdfFooter";
 import PdfHeader from "./PdfHeader";
-import { columns } from "../tables/ap-inquiry/columns";
+import { pdfColumns } from "../tables/ap-inquiry/columns";
 import { memo } from "react";
 
 function APInquiryDocument({ data = [], ...headerProps }: any) {
@@ -17,7 +17,7 @@ function APInquiryDocument({ data = [], ...headerProps }: any) {
           }}
         >
           <PdfHeader {...headerProps} />
-          <PdfDataTable columns={columns} data={data} />
+          <PdfDataTable columns={pdfColumns} data={data} />
           <PdfFooter />
         </Page>
       </Document>
