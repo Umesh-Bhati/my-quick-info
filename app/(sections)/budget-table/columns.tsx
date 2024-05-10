@@ -18,6 +18,24 @@ export type Budget = {
   desc?: string;
 };
 
+const renderTableNumCell = (val: number, isBold?: string | boolean) => (
+  <h1
+    className={`${!!isBold ? "font-bold text-[14.5px]" : "text-sm"} ${
+      +val !== 0
+        ? +val > 0
+          ? isBold
+            ? "text-green-600"
+            : "text-green-500"
+          : isBold
+          ? "text-red-600"
+          : "text-red-500"
+        : ""
+    } text-primary-forground  `}
+  >
+    {val}
+  </h1>
+);
+
 export const columns: ColumnDef<Budget>[] = [
   {
     accessorKey: "G_L_Account_No",
@@ -38,62 +56,51 @@ export const columns: ColumnDef<Budget>[] = [
   {
     accessorKey: "mtd",
     header: "MTD",
-    cell: ({ row }) =>
-      row.original?.desc ? (
-        <h1 className="text-primary-forground text-sm font-bold">
-          {row.original.mtd}
-        </h1>
-      ) : (
-        row.original.mtd
-      ),
+    cell: ({
+      row: {
+        original: { desc, mtd },
+      },
+    }) => renderTableNumCell(+mtd, desc),
   },
   {
     accessorKey: "ytd",
     header: "YTD",
-    cell: ({ row }) =>
-      row.original?.desc ? (
-        <h1 className="text-primary-forground text-sm font-bold">
-          {row.original.ytd}
-        </h1>
-      ) : (
-        row.original.ytd
-      ),
+
+    cell: ({
+      row: {
+        original: { desc, ytd },
+      },
+    }) => renderTableNumCell(+ytd, desc),
   },
   {
     accessorKey: "openPurchOrd",
     header: "Open Purch Ord",
-    cell: ({ row }) =>
-      row.original?.desc ? (
-        <h1 className="text-primary-forground text-sm font-bold">
-          {row.original.openPurchOrd}
-        </h1>
-      ) : (
-        row.original.openPurchOrd
-      ),
+
+    cell: ({
+      row: {
+        original: { desc, openPurchOrd },
+      },
+    }) => renderTableNumCell(+openPurchOrd, desc),
   },
   {
     accessorKey: "openReq",
     header: "Open Req",
-    cell: ({ row }) =>
-      row.original?.desc ? (
-        <h1 className="text-primary-forground text-sm font-bold">
-          {row.original.openReq}
-        </h1>
-      ) : (
-        row.original.openReq
-      ),
+
+    cell: ({
+      row: {
+        original: { desc, openReq },
+      },
+    }) => renderTableNumCell(+openReq, desc),
   },
   {
     accessorKey: "budget",
     header: "Budget",
-    cell: ({ row }) =>
-      row.original?.desc ? (
-        <h1 className="text-primary-forground text-sm font-bold">
-          {row.original.budget}
-        </h1>
-      ) : (
-        row.original.budget
-      ),
+
+    cell: ({
+      row: {
+        original: { desc, budget },
+      },
+    }) => renderTableNumCell(+budget, desc),
   },
   {
     accessorKey: "budget",
@@ -102,16 +109,39 @@ export const columns: ColumnDef<Budget>[] = [
       row: {
         original: { ytd, openPurchOrd, openReq, budget, desc },
       },
-    }) =>
-      desc ? (
-        <h1 className="text-primary-forground text-sm font-bold">
-          {fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)}
-        </h1>
-      ) : (
-        fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)
-      ),
+    }) => {
+      const avlVal = fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq);
+      return renderTableNumCell(avlVal, desc);
+    },
   },
 ];
+
+const renderNumCell = (val: number, isBold?: string | boolean) => {
+  return !!isBold ? (
+    <Text
+      style={[
+        styles.boldTxt,
+        +val !== 0
+          ? { color: +val > 0 ? "rgb(22, 163, 74)" : "rgb(220, 38, 38)" }
+          : {},
+      ]}
+    >
+      {val}
+    </Text>
+  ) : (
+    <Text
+      style={[
+        styles.cellTxt,
+        +val !== 0
+          ? { color: +val > 0 ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)" }
+          : {},
+      ]}
+    >
+      {val}
+    </Text>
+  );
+};
+
 export const pdfColumns: ColumnDef<Budget>[] = [
   {
     accessorKey: "G_L_Account_No",
@@ -130,60 +160,35 @@ export const pdfColumns: ColumnDef<Budget>[] = [
   {
     accessorKey: "mtd",
     header: "MTD",
+    cell: (row: any) => renderNumCell(row.mtd, row?.desc),
   },
   {
     accessorKey: "ytd",
     header: "YTD",
-    cell: (row: any) =>
-      row.desc ? (
-        <Text style={styles.boldTxt}> {row.ytd}</Text>
-      ) : (
-        <Text style={styles.cellTxt}> {row.ytd}</Text>
-      ),
+    cell: (row: any) => renderNumCell(row.ytd, row?.desc),
   },
   {
     accessorKey: "openPurchOrd",
     header: "Open Purch Ord",
-    cell: (row: any) =>
-      row.desc ? (
-        <Text style={styles.boldTxt}> {row.ytd}</Text>
-      ) : (
-        <Text style={styles.cellTxt}> {row.ytd}</Text>
-      ),
+    cell: (row: any) => renderNumCell(row.openPurchOrd, row?.desc),
   },
   {
     accessorKey: "openReq",
     header: "Open Req",
-    cell: (row: any) =>
-      row.desc ? (
-        <Text style={styles.boldTxt}> {row.openReq}</Text>
-      ) : (
-        <Text style={styles.cellTxt}> {row.openReq}</Text>
-      ),
+    cell: (row: any) => renderNumCell(row.openReq, row?.desc),
   },
   {
     accessorKey: "budget",
     header: "Budget",
-    cell: (row: any) =>
-      row.desc ? (
-        <Text style={styles.boldTxt}> {row.budget}</Text>
-      ) : (
-        <Text style={styles.cellTxt}> {row.budget}</Text>
-      ),
+    cell: (row: any) => renderNumCell(row.budget, row?.desc),
   },
   {
     accessorKey: "budget",
     header: "Available",
-    cell: ({ budget, ytd, openPurchOrd, openReq, desc }: any) =>
-      desc ? (
-        <Text style={styles.boldTxt}>
-          {fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)}
-        </Text>
-      ) : (
-        <Text style={styles.cellTxt}>
-          {fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq)}
-        </Text>
-      ),
+    cell: ({ budget, ytd, openPurchOrd, openReq, desc }: any) => {
+      const avlVal = fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq);
+      return renderNumCell(avlVal, desc);
+    },
   },
 ];
 
@@ -195,7 +200,7 @@ const styles = StyleSheet.create({
   },
   boldTxt: {
     fontWeight: "ultrabold",
-    textAlign: "center",
+    textAlign: "left",
     color: "#000000",
     fontSize: 9,
   },

@@ -51,14 +51,27 @@ export const columns: ColumnDef<GlDetail>[] = [
   {
     accessorKey: "Amount",
     header: "Amount",
-    cell: ({ row }) =>
-      row.original.desc ? (
-        <h1 className="text-primary-forground text-sm font-semiBold">
-          {row.original.total}
-        </h1>
-      ) : (
-        row.original.Amount
-      ),
+    cell: ({
+      row: {
+        original: { total = 0, Amount, desc },
+      },
+    }) => (
+      <h1
+        className={`${
+          desc
+            ? +total > 0
+            : +Amount > 0
+            ? desc
+              ? "text-green-600"
+              : "text-green-500"
+            : desc
+            ? "text-red-600"
+            : "text-red-500"
+        } text-primary-forground text-sm font-semiBold`}
+      >
+        {desc ? +total : Amount}
+      </h1>
+    ),
   },
 ];
 
@@ -105,9 +118,33 @@ export const pdfColumns = [
 
     cell: (row: any) =>
       row.desc ? (
-        <Text style={styles.boldTxt}> {row.total}</Text>
+        <Text
+          style={[
+            styles.boldTxt,
+            +row.total !== 0
+              ? {
+                  color:
+                    +row.total > 0 ? "rgb(22, 163, 74)" : "rgb(220, 38, 38)",
+                }
+              : {},
+          ]}
+        >
+          {row.total}
+        </Text>
       ) : (
-        <Text style={styles.cellTxt}> {row.Amount}</Text>
+        <Text
+          style={[
+            styles.cellTxt,
+            +row.Amount !== 0
+              ? {
+                  color:
+                    +row.Amount > 0 ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)",
+                }
+              : {},
+          ]}
+        >
+          {row.Amount}
+        </Text>
       ),
     width: "10%",
   },

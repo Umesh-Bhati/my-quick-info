@@ -65,7 +65,7 @@ const budgetTable = (data: any[], postingDate: string | Date = new Date(), fundN
               totalMtd = fixedDecimal(+totalMtd + +Amount)
             }
             if (+fundNo < 500) {
-              if (new Date(item.postingDate).getTime() >= new Date(startFundDate).getTime()) {
+              if (new Date(item.Posting_Date).getTime() >= new Date(startFundDate).getTime()) {
                 formatedObj["ytd"] = fixedDecimal(+formatedObj["ytd"] + +Amount);
                 totalYtd = fixedDecimal(+totalYtd + +Amount)
               }
@@ -96,7 +96,7 @@ const budgetTable = (data: any[], postingDate: string | Date = new Date(), fundN
           }
           case "Budget": {
             if (+fundNo < 500) {
-              if (new Date(item.postingDate).getTime() >= new Date(startFundDate).getTime()) {
+              if (new Date(item.Posting_Date).getTime() >= new Date(startFundDate).getTime()) {
                 formatedObj["budget"] = fixedDecimal(
                   +formatedObj["budget"] + +Amount
                 );
