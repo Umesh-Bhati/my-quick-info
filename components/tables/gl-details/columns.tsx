@@ -2,6 +2,7 @@
 
 import { StyleSheet, Text } from "@react-pdf/renderer";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 
 export type GlDetail = {
   G_L_Account_No: string;
@@ -35,6 +36,11 @@ export const columns: ColumnDef<GlDetail>[] = [
   {
     accessorKey: "Posting_Date",
     header: "Posting Date",
+    cell: ({
+      row: {
+        original: { Posting_Date },
+      },
+    }) => Posting_Date ? format(Posting_Date, "MM-dd-yyyy") : "",
   },
   {
     accessorKey: "Description",
@@ -59,11 +65,7 @@ export const columns: ColumnDef<GlDetail>[] = [
       return desc ? (
         <h1
           className={`${
-            +total !== 0
-              ? +total > 0
-                ? "text-green-600"
-                : "text-red-600"
-              : ""
+            +total !== 0 ? (+total > 0 ? "text-green-600" : "text-red-600") : ""
           } text-primary-forground text-sm font-semiBold`}
         >
           {total}
@@ -107,6 +109,11 @@ export const pdfColumns = [
     accessorKey: "Posting_Date",
     header: "Posting Date",
     width: "10%",
+    cell: (row: any) => (
+      <Text style={styles.cellTxt}>
+        {row.Posting_Date ? format(row.Posting_Date, "MM-dd-yyyy") : ''}
+      </Text>
+    ),
   },
   {
     accessorKey: "Description",

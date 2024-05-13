@@ -76,7 +76,7 @@ export const fetchFunds = async () => {
     return { value, "@odata.count": 0, "@odata.nextLink": "" }
   } catch (error) {
     console.error("getFundErr ", error);
-    return { value:[], "@odata.count": 0, "@odata.nextLink": "" }
+    return { value: [], "@odata.count": 0, "@odata.nextLink": "" }
   }
 };
 
@@ -89,6 +89,24 @@ export const fetchGl = async ({
 }: any) => {
   try {
     let query = `General_Ledger_Entries_Excel?$filter=G_L_Account_No ge '400000' and G_L_Account_No le '999999'  ${startDate ? `and Posting_Date ge ${format(startDate, 'yyyy-MM-dd')}` : ''} and Posting_Date le ${format(endDate, 'yyyy-MM-dd')}`
+    const { data } = await axiosInterceptorInstance.get(
+      `${query} and Fund_No_NVG eq \'${fundNo}\' ${departmentCode === "All" ? '' : `and Global_Dimension_1_Code eq \'${departmentCode}\' `}${transactionType ? ` and Transaction_Type_NVG eq \'${transactionType}\'` : ""
+      } &$count=true`
+    );
+    return data;
+  } catch (error) {
+    console.error("getBudgetTable ", error);
+  }
+};
+export const fetchGlDetail = async ({
+  startDate,
+  endDate,
+  fundNo,
+  departmentCode,
+  transactionType,
+}: any) => {
+  try {
+    let query = `General_Ledger_Entries_Excel?$filter=${startDate ? `Posting_Date ge ${format(startDate, 'yyyy-MM-dd')} and ` : ''} Posting_Date le ${format(endDate, 'yyyy-MM-dd')}`
     const { data } = await axiosInterceptorInstance.get(
       `${query} and Fund_No_NVG eq \'${fundNo}\' ${departmentCode === "All" ? '' : `and Global_Dimension_1_Code eq \'${departmentCode}\' `}${transactionType ? ` and Transaction_Type_NVG eq \'${transactionType}\'` : ""
       } &$count=true`

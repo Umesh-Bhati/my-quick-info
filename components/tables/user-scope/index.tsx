@@ -38,7 +38,7 @@ export default function UsersScopeTable({ users, fundList }: any) {
     } catch (error) {}
   };
 
-  const fundOnChange = async (val) => {
+  const fundOnChange = async () => {
     try {
     } catch (error) {}
   };
