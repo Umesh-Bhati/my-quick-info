@@ -76,6 +76,7 @@ export const fetchFunds = async () => {
     return { value, "@odata.count": 0, "@odata.nextLink": "" }
   } catch (error) {
     console.error("getFundErr ", error);
+    return { value:[], "@odata.count": 0, "@odata.nextLink": "" }
   }
 };
 

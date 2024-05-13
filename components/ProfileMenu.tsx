@@ -72,7 +72,7 @@ export function ProfileMenu({ isAdmin = false }: { isAdmin: boolean }) {
                     List
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Scope</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/users-scope")} >Scope</DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
