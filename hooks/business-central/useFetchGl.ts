@@ -1,7 +1,7 @@
 "use client"
-import { fetchGl, fetchGlDetail } from "@/components/forms/on-demand-reports/budget-vs-actual/action";
+import { fetchGl } from "@/components/forms/on-demand-reports/budget-vs-actual/action";
 import { fetchNextPageData } from "@/components/forms/on-demand-reports/gl-details/action";
-import { useMemo, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 
 interface IGlArgs {
@@ -39,7 +39,7 @@ export default function useFetchGl() {
                 }
             } else if (type === 'on-submit') {
                 setIsLoading(true)
-                const responseData = glFilters?.transactionType ? await fetchGlDetail(glFilters) : await fetchGl(glFilters)
+                const responseData = await fetchGl(glFilters)
                 hasNextPage.current.lastLength = responseData.value.length
                 hasNextPage.current.totalCount = responseData["@odata.count"]
                 setData(responseData)

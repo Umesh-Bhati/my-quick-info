@@ -23,21 +23,37 @@ export function calTotalOfGlTable(data: any[], keyToTotal: string, totalKeySuffi
   let desc = ''
   const finalResponse: any[] = []
   data.sort((firstItem, secItem) => +firstItem[keyToTotal] - secItem[keyToTotal]).forEach((item, index) => {
-    if (index === data.length - 1) {
-      finalResponse.push({ total: Number.isInteger(total) ? +total : +Number(total).toFixed(2), desc })
-    } else if (typeof specificItem === 'undefined') {
-      total = item[keyToAmt]
+    if (typeof specificItem === 'undefined') {
+      total = +item[keyToAmt]
       specificItem = item[keyToTotal]
       desc = item[totalKeySuffix]
       finalResponse.push(item)
+      index === data.length - 1 && finalResponse.push({
+        total: Number.isInteger(+total) ? +total : +Number(total).toFixed(2),
+        desc
+      })
     } else if (specificItem === item[keyToTotal]) {
-      total += item[keyToAmt]
+      total += +item[keyToAmt]
       finalResponse.push(item)
+      index === data.length - 1 && finalResponse.push({
+        total: Number.isInteger(+total) ? +total : +Number(total).toFixed(2),
+        desc
+      })
     } else {
-      finalResponse.push({ total: Number.isInteger(total) ? +total : +Number(total).toFixed(2), desc }, item)
-      specificItem = item[keyToTotal]
-      total = item[keyToAmt]
-      desc = item[totalKeySuffix]
+      if (index === data.length - 1) {
+        finalResponse.push({ total: Number.isInteger(+total) ? +total : +Number(total).toFixed(2), desc },
+          item,
+          {
+            total: Number.isInteger(+item[keyToTotal]) ? +item[keyToTotal] : +Number(item[keyToTotal]).toFixed(2),
+            desc: item[totalKeySuffix]
+          })
+      } else {
+        finalResponse.push({ total: Number.isInteger(+total) ? +total : +Number(total).toFixed(2), desc }, item)
+        index === data.length - 1 && finalResponse.push()
+        specificItem = item[keyToTotal]
+        total = +item[keyToAmt]
+        desc = item[totalKeySuffix]
+      }
     }
   })
   return finalResponse
