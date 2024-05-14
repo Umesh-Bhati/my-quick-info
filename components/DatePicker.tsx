@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/popover";
 
 export function DatePicker(props: CalendarProps | any) {
+  const [calendarOpen, setCalendarOpen] = React.useState(false);
   return (
-    <Popover>
+    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
       <PopoverTrigger asChild>
         <button
           className={
@@ -28,7 +29,14 @@ export function DatePicker(props: CalendarProps | any) {
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar  mode="single" {...props} />
+        <Calendar
+          mode="single"
+          {...props}
+          onSelect={(val) => {
+            props.onSelect(val);
+            setCalendarOpen(false);
+          }}
+        />
       </PopoverContent>
     </Popover>
   );
