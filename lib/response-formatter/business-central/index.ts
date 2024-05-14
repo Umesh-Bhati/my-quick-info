@@ -58,22 +58,24 @@ const budgetTable = (data: any[], postingDate: string | Date = new Date(), fundN
         lastItem = item;
         switch (item.Transaction_Type_NVG) {
           case "Actual": {
-            if (
-              new Date(item.Posting_Date) >= startOfPostingMonth
-            ) {
-              formatedObj["mtd"] = fixedDecimal(+formatedObj["mtd"] + +Amount);
-              totalMtd = fixedDecimal(+totalMtd + +Amount)
-            }
-            if (+fundNo < 500) {
-              if (new Date(item.Posting_Date).getTime() >= new Date(startFundDate).getTime()) {
+            const isPostingMonthDate = new Date(item.Posting_Date) >= startOfPostingMonth
+            const isFyDate = new Date(item.Posting_Date).getTime() >= new Date(startFundDate).getTime()
+            const isNotCLSINCOME = item.Source_Code !== "CLSINCOME"
+            if (isNotCLSINCOME) {
+              if (isPostingMonthDate) {
+                formatedObj["mtd"] = fixedDecimal(+formatedObj["mtd"] + +Amount);
+                totalMtd = fixedDecimal(+totalMtd + +Amount)
+              }
+              if (+fundNo < 500) {
+                if (isFyDate) {
+                  formatedObj["ytd"] = fixedDecimal(+formatedObj["ytd"] + +Amount);
+                  totalYtd = fixedDecimal(+totalYtd + +Amount)
+                }
+              } else {
                 formatedObj["ytd"] = fixedDecimal(+formatedObj["ytd"] + +Amount);
                 totalYtd = fixedDecimal(+totalYtd + +Amount)
               }
-            } else {
-              formatedObj["ytd"] = fixedDecimal(+formatedObj["ytd"] + +Amount);
-              totalYtd = fixedDecimal(+totalYtd + +Amount)
             }
-
             break;
           }
           case "Encumbrance": {
