@@ -44,17 +44,17 @@ export function calTotalOfGlTable(data: any[], keyToTotal: string, totalKeySuffi
         finalResponse.push({ total: Number.isInteger(+total) ? +total : +Number(total).toFixed(2), desc },
           item,
           {
-            total: Number.isInteger(+item[keyToTotal]) ? +item[keyToTotal] : +Number(item[keyToTotal]).toFixed(2),
+            total: Number.isInteger(+item[keyToAmt]) ? +item[keyToAmt] : +Number(item[keyToAmt]).toFixed(2),
             desc: item[totalKeySuffix]
           })
       } else {
         finalResponse.push({ total: Number.isInteger(+total) ? +total : +Number(total).toFixed(2), desc }, item)
-        index === data.length - 1 && finalResponse.push()
         specificItem = item[keyToTotal]
         total = +item[keyToAmt]
         desc = item[totalKeySuffix]
       }
     }
   })
+
   return finalResponse
 }
