@@ -18,29 +18,45 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { fetchScopesByUserId } from "./action";
+import { deleteScope, fetchScopesByUserId, updateOrSaveScope } from "./action";
 import MultiSelect from "react-select";
-import makeAnimated from 'react-select/animated';
+import { Button } from "@/components/ui/button";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
-
-export default function UsersScopeTable({ users, fundList }: any) {
+export default function UsersScopeTable({ users, fundList, departments }: any) {
   const form = useForm();
-  const [deptList, setDeptList] = useState();
   const [scopes, setScopes] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<number | string>("");
 
-  const onSubmit = async () => {
+  const onSubmit = async (val: any) => {
     try {
-    } catch (error) {}
+      setIsLoading(true);
+      await updateOrSaveScope({
+        fund_no: val.fundNo,
+        dept_rel: val.deptNo.map((item: any) => item.value)?.join(","),
+        user_id: +val.user_id,
+      });
+      await userOnChange(val.user_id);
+    } catch (error) {
+      console.error("errr ", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const fundOnChange = async () => {
+  const fundOnChange = async (val: any) => {
     try {
-    } catch (error) {}
+      const scope = scopes.find((item: any) => item.fund_no == val);
+      const dept = scope.dept_rel.split(",").map((item: any) => {
+        const { Code, Name } =
+          departments.find((deptItem: any) => deptItem.Code === item) || {};
+        return { label: `${Code} ${Name}`, value: Code };
+      });
+      form.setValue("deptNo", dept);
+    } catch (error) {
+      console.error("error", error);
+    }
   };
 
   const userOnChange = async (user_id: any) => {
@@ -52,12 +68,24 @@ export default function UsersScopeTable({ users, fundList }: any) {
     }
   };
 
+  const onDelete = async (id: number) => {
+    try {
+      setIsDeleting(id);
+      await deleteScope(id);
+      setScopes((old: any) => old.filter((item: any) => item.id !== id));
+    } catch (error) {
+      console.error("OndeleteScopeErr");
+    } finally {
+      setIsDeleting("");
+    }
+  };
+
   return (
     <div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid grid-cols-3 gap-3 w-full min-h-fit flex-wrap"
+          className="grid grid-cols-4 mb-5 gap-3 w-full min-h-fit flex-wrap"
         >
           <FormField
             control={form.control}
@@ -70,15 +98,19 @@ export default function UsersScopeTable({ users, fundList }: any) {
                     userOnChange(user_id);
                     field.onChange(user_id);
                   }}
-                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select User" />
+                      <SelectValue placeholder="Select User">
+                        {field.value
+                          ? users.find((item: any) => item.id == field.value)
+                              ?.name
+                          : ""}
+                      </SelectValue>
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {users?.map((user: any) => (
+                    {users?.map((user: any, key: number) => (
                       <SelectItem key={user.id} value={user.id}>
                         {user.name}
                       </SelectItem>
@@ -95,7 +127,13 @@ export default function UsersScopeTable({ users, fundList }: any) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Fund</FormLabel>
-                <Select onValueChange={fundOnChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                    fundOnChange(val);
+                  }}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Fund" />
@@ -118,15 +156,35 @@ export default function UsersScopeTable({ users, fundList }: any) {
             name="deptNo"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Fund</FormLabel>
-                <MultiSelect options={options} />
+                <FormLabel>Departments</FormLabel>
+                <MultiSelect
+                  isMulti
+                  onChange={field.onChange}
+                  value={field.value}
+                  options={departments.map((item: any) => ({
+                    label: `${item.Code} ${item.Name}`,
+                    value: item.Code,
+                  }))}
+                />
                 <FormMessage />
               </FormItem>
             )}
           />
+          <Button
+            disabled={isLoading}
+            type="submit"
+            className="max-h-9 text-sm self-end"
+          >
+            {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+            Save
+          </Button>
         </form>
       </Form>
-      <DataTable columns={columns} data={scopes} fetchNextPage={() => {}} />
+      <DataTable
+        columns={columns(onDelete, isDeleting)}
+        data={scopes}
+        fetchNextPage={() => {}}
+      />
     </div>
   );
 }

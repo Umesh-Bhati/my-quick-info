@@ -1,4 +1,3 @@
-// pages/api/register.js
 
 import { hash } from 'bcrypt';
 import { json, prisma } from '../../../db'
@@ -11,7 +10,6 @@ export async function POST(req: any) {
     }
 
     const { name, last_name, email, password, is_admin } = await req.json();
-    console.log("body ", { name, last_name, email, password, is_admin })
 
     try {
         if (!name || !last_name || !email || !password) {

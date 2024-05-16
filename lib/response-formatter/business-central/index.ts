@@ -120,7 +120,7 @@ const budgetTable = (data: any[], postingDate: string | Date = new Date(), fundN
         if (index === data.length - 1) {
           finalResponse.push(
             { ...item, ...formatedObj },
-            { ytd: totalYtd, mtd: totalMtd, budget: totalBudget, openReq: openReqTotal, openPurchOrd: openPurchOrdTotal, desc: "Expenses" }
+            { ytd: totalYtd, mtd: totalMtd, budget: totalBudget, openReq: openReqTotal, openPurchOrd: openPurchOrdTotal, desc: +item["G_L_Account_No"]?.toString()[0] === 4 ? "Revenue" : "Expenses" }
           );
         }
       }

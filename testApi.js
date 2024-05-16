@@ -75,25 +75,7 @@ const getOAuthAceessToken = async () => {
 
 console.log("startFundDate ", startFundDate);
 
-getOAuthAceessToken()
-  .then((res) => res)
-  .catch((err) => err);
-
-let bottle = 99;
-
-for (let i = 99; i >= 0; i--) {
-  if (i === 0) {
-    console.log(
-      "No more bottles of beer on the wall, no more bottles of beer.\nGo to the store and buy some more, 99 bottles of beer on the wall."
-    );
-  } else {
-    console.log(
-      `${i} bottles of beer on the wall, ${i} bottles of beer.\nTake one down and pass it around, ${
-        i - 1 === 0 ? "no more bottle" : `${i - 1} bottles`
-      } of beer on the wall`
-    );
-  }
-}
-
-
-console.log(`${i} bottles of beer on the wall, ${i} bottles of beer.\nTake one down and pass it around, `${i-1 === 0 ? "no more bottle" : `${i-1} bottles`} of beer on the wall`)
+// getOAuthAceessToken()
+//   .then((res) => res)
+//   .catch((err) => err);
+console.log("startFundDate ",startFundDate)
