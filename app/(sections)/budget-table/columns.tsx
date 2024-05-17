@@ -18,23 +18,26 @@ export type Budget = {
   desc?: string;
 };
 
-const renderTableNumCell = (val: number, isBold?: string | boolean) => (
-  <h1
-    className={`${!!isBold ? "font-bold text-[14.5px]" : "text-sm"} ${
-      +val !== 0
-        ? +val > 0
-          ? isBold
-            ? "text-green-600"
-            : "text-green-500"
-          : isBold
-          ? "text-red-600"
-          : "text-red-500"
-        : ""
-    } text-primary-forground  `}
-  >
-    {val}
-  </h1>
-);
+const renderTableNumCell = (val: number, isBold?: string | boolean) => {
+  if (+val === 0) return "";
+  return (
+    <h1
+      className={`${!!isBold ? "font-bold text-[14.5px]" : "text-sm"} ${
+        +val !== 0
+          ? +val > 0
+            ? isBold
+              ? "text-green-600"
+              : "text-green-500"
+            : isBold
+            ? "text-red-600"
+            : "text-red-500"
+          : ""
+      } text-primary-forground  `}
+    >
+      {val}
+    </h1>
+  );
+};
 
 export const columns: ColumnDef<Budget>[] = [
   {
@@ -117,6 +120,7 @@ export const columns: ColumnDef<Budget>[] = [
 ];
 
 const renderNumCell = (val: number, isBold?: string | boolean) => {
+  if (+val === 0) return <></>;
   return !!isBold ? (
     <Text
       style={[

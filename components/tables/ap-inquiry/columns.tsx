@@ -2,6 +2,8 @@
 
 import { Text } from "@react-pdf/renderer";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { StyleSheet } from "@react-pdf/renderer";
 
 export type VendorType = {
   G_L_Account_No: string;
@@ -19,6 +21,11 @@ export const columns: ColumnDef<VendorType>[] = [
   {
     accessorKey: "Posting_Date",
     header: "Document Date",
+    cell: ({
+      row: {
+        original: { Posting_Date },
+      },
+    }) => (Posting_Date ? format(Posting_Date, "MM-dd-yyyy") : ""),
   },
   {
     accessorKey: "Document_Type",
@@ -114,3 +121,17 @@ export const pdfColumns = [
     header: "Description",
   },
 ];
+
+const styles = StyleSheet.create({
+  cellTxt: {
+    textAlign: "left",
+    fontSize: 8,
+    fontWeight: "normal",
+  },
+  boldTxt: {
+    fontWeight: "ultrabold",
+    textAlign: "center",
+    color: "#000000",
+    fontSize: 9,
+  },
+});

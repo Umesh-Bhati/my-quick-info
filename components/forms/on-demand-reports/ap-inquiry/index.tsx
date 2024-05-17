@@ -9,19 +9,32 @@ import {
 } from "../../../ui/form";
 import { Button } from "../../../ui/button";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../ui/select";
+
 import { DatePicker } from "../../../DatePicker";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
 import ExportPdf from "@/components/exports/ExportPdf";
 import APInquiryDocument from "@/components/exports/APInquiryDocument";
+import MultiSelect from "react-select";
 
+const documentTypeOptions = [
+  {
+    label: "Payment",
+    value: "Payment",
+  },
+  {
+    label: "Invoice",
+    value: "Invoice",
+  },
+  {
+    label: "Credit Memo",
+    value: "Credit Memo",
+  },
+  {
+    label: "Refund",
+    value: "Refund",
+  },
+];
 export interface IApInquiryForm {
   isReqLoading?: boolean;
   onSubmit?: HTMLFormElement["onsubmit"];
@@ -39,6 +52,7 @@ export default function ApInquiryForm({
   isFetchingNext,
   data,
 }: IApInquiryForm) {
+
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
       <Form {...form}>
@@ -92,11 +106,13 @@ export default function ApInquiryForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Document Type</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
+                <MultiSelect
+                  onChange={field.onChange}
+                  value={field.value}
+                  options={documentTypeOptions}
+                  isMulti
+                />
+                {/* <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Department Type" />
                     </SelectTrigger>
@@ -110,7 +126,7 @@ export default function ApInquiryForm({
                       )
                     )}
                   </SelectContent>
-                </Select>
+                </MultiSelect> */}
 
                 <FormMessage />
               </FormItem>
@@ -230,7 +246,15 @@ export default function ApInquiryForm({
                     reportType="Ap Inquiry"
                     toDate={form.watch("endDate")}
                     fromDate={form.watch("startDate")}
-                    documentType={form.watch("Document_Type") || "All"}
+                    documentType={
+                      Array.isArray(form.watch("Document_Type")) &&
+                      form.watch("Document_Type")?.length > 0
+                        ? form
+                            .watch("Document_Type")
+                            .map((item: any) => item.value)
+                            .join(",")
+                        : "All"
+                    }
                     vendorNo={form.watch("Vendor_No")}
                     vendorName={form.watch("Vendor_Name")}
                     description={form.watch("Description")}

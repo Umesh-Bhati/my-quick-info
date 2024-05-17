@@ -44,8 +44,11 @@ export const fetchVendors = async ({ startDate, endDate, Vendor_No, Document_Typ
         if (Vendor_No) {
             query += `Vendor_No eq \'${Vendor_No}\' and `
         }
-        if (Document_Type) {
-            query += `Document_Type eq \'${Document_Type}\' and `
+        if (Array.isArray(Document_Type) && Document_Type.length > 0) {
+            for (let i = 0; i < Document_Type.length; i++) {
+                const item: any = Document_Type[i]
+                query += `${i == 0 ? "(" : ""} Document_Type eq \'${item.value}\' ${Document_Type.length - 1 == i ? ") and " : " or "} `
+            }
         }
         if (Document_No) {
             query += `Document_No eq \'${Document_No}\' and `

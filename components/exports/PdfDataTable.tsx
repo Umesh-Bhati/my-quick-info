@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     borderRight: 0.5,
     backgroundColor: "#103A84",
     borderColor: "white",
+    padding: "1px",
   },
   columnHeader: {
     fontWeight: "bold",
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
     borderRight: 0.5,
+    padding: "1px",
   },
   cellTxt: {
     textAlign: "left",
