@@ -19,7 +19,7 @@ export default function BudgetVsActual({ data = [], ...headerProps }: any) {
           <PdfHeader {...headerProps} />
           <PdfDataTable
             columns={pdfColumns}
-            data={bcTableFormatters.budgetTable(data, headerProps.postingDate, headerProps.postingDate.fundNo)}
+            data={bcTableFormatters.budgetTable(data, headerProps.postingDate, headerProps?.fundNo)}
           />
           <PdfFooter />
         </Page>
