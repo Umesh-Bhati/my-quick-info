@@ -34,7 +34,7 @@ export default function PdfHeader({
     (process.env.NODE_ENV === "development" && "3000") ||
     "3008";
 
-  const URL = `http://localhost:${PORT}/logos/images/harshwal.png`;
+  const URL = `http://18.191.23.206:${PORT}/logos/images/harshwal.png`;
   return (
     <View style={styles.container}>
       <Image src={URL} style={styles.logoImg} />
