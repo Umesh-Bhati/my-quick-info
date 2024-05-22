@@ -41,7 +41,8 @@ export interface IApInquiryForm {
   exportToPdf: () => void;
   isFetchingNext?: boolean;
   data: any;
-  isGenerated?: boolean;
+  isGenerate?: boolean;
+  setIsGenerate?: (arg: boolean) => void;
 }
 
 export default function ApInquiryForm({
@@ -51,7 +52,8 @@ export default function ApInquiryForm({
   exportToPdf,
   isFetchingNext,
   data,
-  isGenerated,
+  isGenerate,
+  setIsGenerate,
 }: IApInquiryForm) {
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
@@ -226,7 +228,8 @@ export default function ApInquiryForm({
             ) : (
               <ExportPdf
                 fileName="Ap-Inquiry"
-                isGenerated={isGenerated}
+                isGenerate={isGenerate}
+                setIsGenerate={setIsGenerate}
                 document={
                   <APInquiryDocument
                     data={data.value}

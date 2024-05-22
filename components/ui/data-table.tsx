@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
-                    className="text-sm text-left  font-bold"
+                    className="text-sm text-left min-w-20 font-bold"
                     key={header.id}
                   >
                     {header.isPlaceholder
@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <TableCell
-                      className={`text-left border-r border`}
+                      className={`text-left min-w-48 border-r border`}
                       key={cell.id}
                     >
                       {flexRender(

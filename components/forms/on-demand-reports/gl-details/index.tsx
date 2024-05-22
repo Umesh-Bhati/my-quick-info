@@ -32,7 +32,8 @@ export interface IGl {
   exportToPdf: () => void;
   isFetchingNext?: boolean;
   data: any;
-  isGenerated?: boolean;
+  isGenerate?: boolean;
+  setIsGenerate?: (arg:boolean) => void;
 }
 
 export default function GlForm({
@@ -46,7 +47,8 @@ export default function GlForm({
   exportToPdf,
   isFetchingNext,
   data,
-  isGenerated,
+  isGenerate,
+  setIsGenerate
 }: IGl) {
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
@@ -222,7 +224,8 @@ export default function GlForm({
             ) : (
               <ExportPdf
                 fileName="GL-Details"
-                isGenerated={isGenerated}
+                isGenerate={isGenerate}
+                setIsGenerate={setIsGenerate}
                 document={
                   <GLDocument
                     data={data.value}

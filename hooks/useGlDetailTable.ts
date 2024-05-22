@@ -48,6 +48,7 @@ export default function useGlDetailTable() {
         fetchNextPage: () => fetchGls('fetch-next'),
         exportToPdf,
         isGenerate,
+        setIsGenerate,
         ...others
     }
 

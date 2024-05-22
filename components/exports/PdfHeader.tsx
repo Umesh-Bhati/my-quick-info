@@ -1,3 +1,4 @@
+"use client";
 import { Image, StyleSheet, Text, View } from "@react-pdf/renderer";
 import { format } from "date-fns";
 
@@ -28,12 +29,15 @@ export default function PdfHeader({
   description,
   documentNo,
 }: IPdfHeader) {
+  const PORT =
+    (typeof window !== "undefined" && window?.location?.port) ||
+    (process.env.NODE_ENV === "development" && "3000") ||
+    "3008";
+
+  const URL = `http://localhost:${PORT}/logos/images/harshwal.png`;
   return (
     <View style={styles.container}>
-      <Image
-        src={"http://localhost:3000/logos/images/harshwal.png"}
-        style={styles.logoImg}
-      />
+      <Image src={URL} style={styles.logoImg} />
       <View style={styles.txtContainer}>
         <Text style={{ fontSize: 11, color: "black" }}>
           {`CAHUILLA BAND OF INDIANS`}
@@ -101,7 +105,7 @@ const styles = StyleSheet.create({
   },
   logoImg: {
     width: 200,
-    aspectRatio: 150/30,
+    aspectRatio: 150 / 30,
     position: "absolute",
     top: 5,
     left: -30,

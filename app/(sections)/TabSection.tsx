@@ -12,7 +12,6 @@ import { useFetchDepartments, useFetchFunds } from "@/hooks/business-central";
 import { useEffect } from "react";
 import { bcTableFormatters } from "@/lib/response-formatter/business-central";
 import useApVendorTable from "@/hooks/useApVendorTable";
-import BudgetVsActual from "@/components/exports/BudgetVsActual";
 
 export default function TabSection() {
   const budgetController = useBudgetTable();
@@ -20,6 +19,7 @@ export default function TabSection() {
   const departmentProps = useFetchDepartments();
   const fundsProps = useFetchFunds();
   const apVendorController = useApVendorTable();
+
 
   useEffect(() => {
     fundsProps.fetchFunds("on-submit");
@@ -29,7 +29,10 @@ export default function TabSection() {
   return (
     <Tabs defaultValue="budgetVsActual">
       <TabsList className="grid w-full items-center py-[6px]  justify-center grid-cols-3">
-        <TabsTrigger className="w-52 self-center  m-auto" value="budgetVsActual">
+        <TabsTrigger
+          className="w-52 self-center  m-auto"
+          value="budgetVsActual"
+        >
           Budget vs Actual
         </TabsTrigger>
         <TabsTrigger className="w-52 self-center  m-auto" value="glDetails">
@@ -41,6 +44,7 @@ export default function TabSection() {
       </TabsList>
       <TabsContent className={"flex  flex-col"} value="budgetVsActual">
         <BugdetForm
+          {...budgetController}
           onSubmit={budgetController.onSubmit}
           fundList={fundsProps.data.value}
           isDepartmentLoading={departmentProps.isLoading}
@@ -63,6 +67,7 @@ export default function TabSection() {
       </TabsContent>
       <TabsContent className={"flex  flex-col"} value="glDetails">
         <GlForm
+          {...glDetailsController}
           onSubmit={glDetailsController.onSubmit}
           fundList={fundsProps.data.value}
           isDepartmentLoading={departmentProps.isLoading}
@@ -74,12 +79,6 @@ export default function TabSection() {
           exportToPdf={glDetailsController.exportToPdf}
           data={glDetailsController.data}
         />
-        <BudgetVsActual
-          fundName={glDetailsController.form.watch("fundNo")}
-          departmentNam={glDetailsController.form.watch("departmentCode")}
-          postingDate={glDetailsController.form.watch("startDate")}
-          data={glDetailsController.data}
-        />
 
         <GlDetailsTable
           {...glDetailsController}
@@ -88,8 +87,8 @@ export default function TabSection() {
       </TabsContent>
       <TabsContent className={"flex  flex-col"} value="apInquiry">
         <ApInquiryForm
-          isReqLoading={apVendorController.isLoading}
           {...apVendorController}
+          isReqLoading={apVendorController.isLoading}
         />
         <ApInquiryTable
           {...apVendorController}

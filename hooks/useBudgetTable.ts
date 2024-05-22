@@ -20,7 +20,7 @@ export default function useBudgetTable() {
         },
     });
     const { fetchGls, ...others } = useFetchGl()
-  const [isGenerate, setIsGenerate] = useState(false);
+    const [isGenerate, setIsGenerate] = useState(false);
 
     const onSubmit = async (values: any) => {
         setIsGenerate(false)
@@ -40,12 +40,15 @@ export default function useBudgetTable() {
         }
     }
 
+
+
     return {
         onSubmit,
         form,
         fetchNextPage: () => fetchGls('fetch-next'),
         exportToPdf,
         isGenerate,
+        setIsGenerate,
         ...others
     }
 

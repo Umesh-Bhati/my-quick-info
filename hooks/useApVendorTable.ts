@@ -36,6 +36,8 @@ export default function useApVendorTable() {
         form,
         fetchNextPage: () => fetchVendors('fetch-next'),
         exportToPdf,
+        isGenerate,
+        setIsGenerate,
         ...others
     }
 
