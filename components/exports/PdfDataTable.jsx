@@ -42,7 +42,7 @@ const PdfDataTable = ({ columns, data, renderHeader, maxEntriesPerPage = 30 }) =
                     const cellItem = row?.[col?.accessorKey];
                     const isAmtsNum = col?.isAmtsNum;
                     const color = isAmtsNum
-                      ? +cellItem > 0
+                      ? +cellItem > 0 || +row?.total > 0
                         ? "rgb(34, 197, 94)"
                         : "rgb(239, 68, 68)"
                       : "#232b2b";

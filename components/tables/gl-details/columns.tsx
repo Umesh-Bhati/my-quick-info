@@ -1,6 +1,5 @@
 "use client";
 
-import { StyleSheet, Text } from "@react-pdf/renderer";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
