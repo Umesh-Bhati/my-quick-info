@@ -9,7 +9,6 @@ import {
 } from "../../../ui/form";
 import { Button } from "../../../ui/button";
 
-
 import { DatePicker } from "../../../DatePicker";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
@@ -42,6 +41,7 @@ export interface IApInquiryForm {
   exportToPdf: () => void;
   isFetchingNext?: boolean;
   data: any;
+  isGenerated?: boolean;
 }
 
 export default function ApInquiryForm({
@@ -51,8 +51,8 @@ export default function ApInquiryForm({
   exportToPdf,
   isFetchingNext,
   data,
+  isGenerated,
 }: IApInquiryForm) {
-
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
       <Form {...form}>
@@ -111,22 +111,8 @@ export default function ApInquiryForm({
                   value={field.value}
                   options={documentTypeOptions}
                   isMulti
+                  className="text-black"
                 />
-                {/* <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Department Type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {["Payment", "Invoice", "Credit Memo", "Refund"]?.map(
-                      (item) => (
-                        <SelectItem key={item} value={item}>
-                          {item}
-                        </SelectItem>
-                      )
-                    )}
-                  </SelectContent>
-                </MultiSelect> */}
 
                 <FormMessage />
               </FormItem>
@@ -240,6 +226,7 @@ export default function ApInquiryForm({
             ) : (
               <ExportPdf
                 fileName="Ap-Inquiry"
+                isGenerated={isGenerated}
                 document={
                   <APInquiryDocument
                     data={data.value}

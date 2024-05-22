@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useFetchGl } from "./business-central";
+import { useState } from "react";
 
 const formSchema = z.object({
     endDate: z.date(),
@@ -19,7 +20,10 @@ export default function useBudgetTable() {
         },
     });
     const { fetchGls, ...others } = useFetchGl()
+  const [isGenerate, setIsGenerate] = useState(false);
+
     const onSubmit = async (values: any) => {
+        setIsGenerate(false)
         fetchGls('on-submit', { ...values, isBudgetVsActual: true });
     };
 
@@ -41,6 +45,7 @@ export default function useBudgetTable() {
         form,
         fetchNextPage: () => fetchGls('fetch-next'),
         exportToPdf,
+        isGenerate,
         ...others
     }
 

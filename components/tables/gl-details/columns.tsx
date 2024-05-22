@@ -40,7 +40,7 @@ export const columns: ColumnDef<GlDetail>[] = [
       row: {
         original: { Posting_Date },
       },
-    }) => Posting_Date ? format(Posting_Date, "MM-dd-yyyy") : "",
+    }) => (Posting_Date ? format(Posting_Date, "MM-dd-yyyy") : ""),
   },
   {
     accessorKey: "Description",
@@ -91,92 +91,39 @@ export const pdfColumns = [
   {
     accessorKey: "G_L_Account_No",
     header: "Account No.",
-    width: "10%",
+    flex: 0.6,
   },
   {
     accessorKey: "G_L_Account_Name",
     header: "G/L Account Name",
-    cell: (row: any) =>
-      row.desc ? (
-        <Text style={styles.boldTxt}> Total: {row.desc}</Text>
-      ) : (
-        <Text style={styles.cellTxt}> {row.G_L_Account_Name}</Text>
-      ),
-
-    width: "18.4%",
+    flex: 1.8,
+    showDescTitle: true,
   },
   {
     accessorKey: "Posting_Date",
     header: "Posting Date",
-    width: "10%",
-    cell: (row: any) => (
-      <Text style={styles.cellTxt}>
-        {row.Posting_Date ? format(row.Posting_Date, "MM-dd-yyyy") : ''}
-      </Text>
-    ),
+    cell: ({ Posting_Date }: any) =>
+      Posting_Date ? format(Posting_Date, "MM-dd-yyyy") : "",
   },
   {
     accessorKey: "Description",
     header: "Description",
-    width: "22%",
+    flex: 2,
   },
   {
     accessorKey: "Document_No",
     header: "Document No",
+    flex:0.9
   },
   {
     accessorKey: "External_Document_No",
     header: "External Document No",
-    width: "16%",
+    flex:1.5
   },
   {
     accessorKey: "Amount",
     header: "Amount",
-
-    cell: (row: any) =>
-      row.desc ? (
-        <Text
-          style={[
-            styles.boldTxt,
-            +row.total !== 0
-              ? {
-                  color:
-                    +row.total > 0 ? "rgb(22, 163, 74)" : "rgb(220, 38, 38)",
-                }
-              : {},
-          ]}
-        >
-          {row.total}
-        </Text>
-      ) : (
-        <Text
-          style={[
-            styles.cellTxt,
-            +row.Amount !== 0
-              ? {
-                  color:
-                    +row.Amount > 0 ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)",
-                }
-              : {},
-          ]}
-        >
-          {row.Amount}
-        </Text>
-      ),
-    width: "10%",
+    isAmtsNum: true,
+    showTotalAmt: true,
   },
 ];
-
-const styles = StyleSheet.create({
-  cellTxt: {
-    textAlign: "left",
-    fontSize: 8,
-    fontWeight: "normal",
-  },
-  boldTxt: {
-    fontWeight: "ultrabold",
-    textAlign: "center",
-    color: "#000000",
-    fontSize: 9,
-  },
-});

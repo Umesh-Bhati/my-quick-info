@@ -35,57 +35,45 @@ export default function PdfHeader({
         style={styles.logoImg}
       />
       <View style={styles.txtContainer}>
-        <Text style={{ fontSize: 8, color: "black" }}>
+        <Text style={{ fontSize: 11, color: "black" }}>
           {`CAHUILLA BAND OF INDIANS`}
         </Text>
         {reportType && (
-          <Text style={styles.boldTxt}>Report Name:- {reportType}</Text>
+          <Text style={styles.txt}>Report Name:- {reportType}</Text>
         )}
         {postingDate && (
-          <Text style={styles.boldTxt}>
+          <Text style={styles.txt}>
             Date:-{" "}
             {format(postingDate ? postingDate : new Date(), "MM-dd-yyyy")}
           </Text>
         )}
         {fromDate && (
-          <Text style={styles.boldTxt}>
+          <Text style={styles.txt}>
             From:- {format(fromDate ? fromDate : new Date(), "MM-dd-yyyy")}
           </Text>
         )}
         {toDate && (
-          <Text style={styles.boldTxt}>
+          <Text style={styles.txt}>
             To:- {format(toDate ? toDate : new Date(), "MM-dd-yyyy")}
           </Text>
         )}
-        {fundName && <Text style={styles.boldTxt}>Fund:- {fundName}</Text>}
+        {fundName && <Text style={styles.txt}>Fund:- {fundName}</Text>}
         {departmentName && (
-          <Text style={{ fontSize: 8, color: "black" }}>
-            Department:- {departmentName}
-          </Text>
+          <Text style={styles.txt}>Department:- {departmentName}</Text>
         )}
         {documentType && (
-          <Text style={styles.boldTxt}>Document Type:- {documentType}</Text>
+          <Text style={styles.txt}>Document Type:- {documentType}</Text>
         )}
 
         {documentNo && (
-          <Text style={{ fontSize: 8, color: "black" }}>
-            Document No:- {documentNo}
-          </Text>
+          <Text style={styles.txt}>Document No:- {documentNo}</Text>
         )}
-        {vendorNo && (
-          <Text style={{ fontSize: 8, color: "black" }}>
-            Vendor No:- {vendorNo}
-          </Text>
-        )}
+        {vendorNo && <Text style={styles.txt}>Vendor No:- {vendorNo}</Text>}
         {vendorName && (
-          <Text style={{ fontSize: 8, color: "black" }}>
-            Vendor Name:- {vendorName}
-          </Text>
+          <Text style={styles.txt}>Vendor Name:- {vendorName}</Text>
         )}
         {description && (
-          <Text style={{ fontSize: 8, color: "black" }}>
-            Description:- {description}
-          </Text>
+          <Text style={styles.txt}>Description:- {description}</Text>
         )}
       </View>
     </View>
@@ -99,6 +87,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
   },
+  txt: {
+    fontSize: 10,
+  },
   txtContainer: {
     width: "50%",
     display: "flex",
@@ -106,19 +97,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
     flexDirection: "column",
-    gap: 3,
+    gap: 5,
   },
   logoImg: {
-    width: 150,
-    height: 30,
+    width: 200,
+    aspectRatio: 150/30,
     position: "absolute",
     top: 5,
-    left: 0,
-  },
-  boldTxt: {
-    fontSize: 8,
-    color: "black",
-    fontFamily: "Helvetica-Bold",
-    fontWeight: "bold",
+    left: -30,
   },
 });

@@ -3,8 +3,12 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { useState } from "react";
 import { Button } from "../ui/button";
 
-export default function ExportPdf({ document, fileName }: any) {
-  const [isGenerate, setIsGenerate] = useState(false);
+export default function ExportPdf({
+  document,
+  fileName,
+  isGenerate = false,
+  setIsGenerate
+}: any) {
   if (isGenerate)
     return (
       <div className="w-full h-full flex justify-center items-center">

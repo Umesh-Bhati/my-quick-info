@@ -1,7 +1,7 @@
 "use client";
 
 import { fixedDecimal } from "@/lib/response-formatter/business-central";
-import { StyleSheet, Text } from "@react-pdf/renderer";
+import { Text } from "@react-pdf/renderer";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type Budget = {
@@ -78,7 +78,6 @@ export const columns: ColumnDef<Budget>[] = [
   {
     accessorKey: "openPurchOrd",
     header: "Open Purch Ord",
-
     cell: ({
       row: {
         original: { desc, openPurchOrd },
@@ -119,93 +118,67 @@ export const columns: ColumnDef<Budget>[] = [
   },
 ];
 
-const renderNumCell = (val: number, isBold?: string | boolean) => {
-  if (+val === 0) return <></>;
-  return !!isBold ? (
-    <Text
-      style={[
-        styles.boldTxt,
-        +val !== 0
-          ? { color: +val > 0 ? "rgb(22, 163, 74)" : "rgb(220, 38, 38)" }
-          : {},
-      ]}
-    >
-      {val}
-    </Text>
-  ) : (
-    <Text
-      style={[
-        styles.cellTxt,
-        +val !== 0
-          ? { color: +val > 0 ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)" }
-          : {},
-      ]}
-    >
-      {val}
-    </Text>
-  );
+type PDFColType = ColumnDef<Budget> & {
+  isAmtsNum?: boolean;
+  flex?: number;
+  showTotalAmt?: boolean;
+  showDescTitle?: boolean;
 };
 
-export const pdfColumns: ColumnDef<Budget>[] = [
+export const pdfColumns: PDFColType[] = [
   {
     accessorKey: "G_L_Account_No",
     header: "GL Account",
+    flex: 0.8
   },
   {
     accessorKey: "G_L_Account_Name",
     header: "G/L Account Name",
-    cell: (row: any) =>
-      row.desc ? (
-        <Text style={styles.boldTxt}>Total: {row.desc}</Text>
-      ) : (
-        <Text style={styles.cellTxt}> {row.G_L_Account_Name}</Text>
-      ),
+    flex: 1.7,
+    showDescTitle: true,
   },
   {
     accessorKey: "mtd",
     header: "MTD",
-    cell: (row: any) => renderNumCell(row.mtd, row?.desc),
+    isAmtsNum: true,
   },
   {
     accessorKey: "ytd",
     header: "YTD",
-    cell: (row: any) => renderNumCell(row.ytd, row?.desc),
+    isAmtsNum: true,
   },
   {
     accessorKey: "openPurchOrd",
     header: "Open Purch Ord",
-    cell: (row: any) => renderNumCell(row.openPurchOrd, row?.desc),
+    flex: 1.5,
+    isAmtsNum: true,
   },
   {
     accessorKey: "openReq",
     header: "Open Req",
-    cell: (row: any) => renderNumCell(row.openReq, row?.desc),
+    isAmtsNum: true,
   },
   {
     accessorKey: "budget",
     header: "Budget",
-    cell: (row: any) => renderNumCell(row.budget, row?.desc),
+    isAmtsNum: true,
+    showTotalAmt: true,
   },
   {
     accessorKey: "budget",
     header: "Available",
-    cell: ({ budget, ytd, openPurchOrd, openReq, desc }: any) => {
-      const avlVal = fixedDecimal(+budget - +ytd - +openPurchOrd - +openReq);
-      return renderNumCell(avlVal, desc);
+    isAmtsNum: true,
+    cell: ({ budget, ytd, openPurchOrd, openReq }: any) => {
+      const val: number = fixedDecimal(
+        +budget - +ytd - +openPurchOrd - +openReq
+      );
+      if (+val < 0)
+        return (
+          <Text style={{ color: "rgb(239, 68, 68)" }}>
+            {Number(val).toLocaleString()}{" "}
+          </Text>
+        );
+      return Number(val).toLocaleString();
     },
   },
 ];
-
-const styles = StyleSheet.create({
-  cellTxt: {
-    textAlign: "left",
-    fontSize: 8,
-    fontWeight: "normal",
-  },
-  boldTxt: {
-    fontWeight: "ultrabold",
-    textAlign: "left",
-    color: "#000000",
-    fontSize: 9,
-  },
-});

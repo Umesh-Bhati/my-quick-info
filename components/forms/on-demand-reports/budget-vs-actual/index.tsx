@@ -32,6 +32,7 @@ export interface IBugdet {
   data: any;
   isFetchingNext: boolean;
   exportToPdf: () => void;
+  isGenerated?:boolean;
 }
 
 export default function BugdetForm({
@@ -45,8 +46,8 @@ export default function BugdetForm({
   data,
   isFetchingNext,
   exportToPdf,
+  isGenerated,
 }: IBugdet) {
-  
   return (
     <div className="flex pb-5 flex-col p-1.5 justify-center items-center">
       <Form {...form}>
@@ -202,6 +203,7 @@ export default function BugdetForm({
             ) : (
               <ExportPdf
                 fileName="Budget-Vs-Actual"
+                isGenerated={isGenerated}
                 document={
                   <BudgetVsActual
                     data={data.value}
@@ -231,7 +233,7 @@ export default function BugdetForm({
                           }`
                     }
                     postingDate={form.watch("endDate")}
-                    fundNo = {form.watch("fundNo")}
+                    fundNo={form.watch("fundNo")}
                   />
                 }
               />

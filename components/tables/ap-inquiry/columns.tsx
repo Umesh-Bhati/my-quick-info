@@ -1,9 +1,7 @@
 "use client";
 
-import { Text } from "@react-pdf/renderer";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { StyleSheet } from "@react-pdf/renderer";
 
 export type VendorType = {
   G_L_Account_No: string;
@@ -79,59 +77,38 @@ export const pdfColumns = [
   {
     accessorKey: "Document_Type",
     header: "Document Type",
+    flex:0.8
   },
   {
     accessorKey: "Document_No",
     header: "Document No",
+    flex:0.8
   },
 
   {
     accessorKey: "External_Document_No",
     header: "External Document No",
+    flex: 1.5,
   },
   {
     accessorKey: "Vendor_No",
     header: "Vendor No",
+    flex: 0.8,
   },
   {
     accessorKey: "Vendor_Name",
     header: "Vendor Name",
+    flex: 0.8,
   },
   {
     accessorKey: "Amount",
     header: "Amount",
-    cell: ({ Amount }: any) => (
-      <Text
-        style={{
-          fontSize: 8,
-          color:
-            +Amount !== 0
-              ? +Amount > 0
-                ? "rgb(22, 163, 74)"
-                : "rgb(220, 38, 38)"
-              : "#000",
-        }}
-      >
-        {Amount}
-      </Text>
-    ),
+    isAmtsNum: true,
+    flex: 0.7,
   },
   {
     accessorKey: "Description",
     header: "Description",
+    flex: 2.5,
   },
 ];
-
-const styles = StyleSheet.create({
-  cellTxt: {
-    textAlign: "left",
-    fontSize: 8,
-    fontWeight: "normal",
-  },
-  boldTxt: {
-    fontWeight: "ultrabold",
-    textAlign: "center",
-    color: "#000000",
-    fontSize: 9,
-  },
-});
