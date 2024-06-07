@@ -67,7 +67,7 @@ export const columns: ColumnDef<GlDetail>[] = [
             +total !== 0 ? (+total > 0 ? "text-green-600" : "text-red-600") : ""
           } text-primary-forground text-sm font-semiBold`}
         >
-          {total}
+          {`$ ${Number(total).toLocaleString()}`}
         </h1>
       ) : (
         <h1
@@ -79,7 +79,7 @@ export const columns: ColumnDef<GlDetail>[] = [
               : " "
           } text-primary-forground text-sm `}
         >
-          {Amount}
+          {`$ ${Number(Amount).toLocaleString()}`}
         </h1>
       );
     },
@@ -112,12 +112,12 @@ export const pdfColumns = [
   {
     accessorKey: "Document_No",
     header: "Document No",
-    flex:0.9
+    flex: 0.9,
   },
   {
     accessorKey: "External_Document_No",
     header: "External Document No",
-    flex:1.5
+    flex: 1.5,
   },
   {
     accessorKey: "Amount",

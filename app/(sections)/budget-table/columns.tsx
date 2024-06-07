@@ -34,7 +34,7 @@ const renderTableNumCell = (val: number, isBold?: string | boolean) => {
           : ""
       } text-primary-forground  `}
     >
-      {val}
+      {`$ ${Number(val).toLocaleString()}`}
     </h1>
   );
 };
@@ -129,7 +129,7 @@ export const pdfColumns: PDFColType[] = [
   {
     accessorKey: "G_L_Account_No",
     header: "GL Account",
-    flex: 0.8
+    flex: 0.8,
   },
   {
     accessorKey: "G_L_Account_Name",
@@ -165,7 +165,7 @@ export const pdfColumns: PDFColType[] = [
     showTotalAmt: true,
   },
   {
-    accessorKey: "budget",
+    accessorKey: "available",
     header: "Available",
     isAmtsNum: true,
     cell: ({ budget, ytd, openPurchOrd, openReq }: any) => {
@@ -175,10 +175,10 @@ export const pdfColumns: PDFColType[] = [
       if (+val < 0)
         return (
           <Text style={{ color: "rgb(239, 68, 68)" }}>
-            {Number(val).toLocaleString()}{" "}
+            {`$ ${Number(val).toLocaleString()}`}{" "}
           </Text>
         );
-      return Number(val).toLocaleString();
+      return `$ ${Number(val).toLocaleString()}`;
     },
   },
 ];

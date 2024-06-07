@@ -59,7 +59,7 @@ export const columns: ColumnDef<VendorType>[] = [
           +Amount !== 0 ? (+Amount > 0 ? "text-green-500" : "text-red-500") : ""
         } text-primary-forground text-sm font-semiBold`}
       >
-        {Amount}
+        {`$ ${Number(Amount).toLocaleString()}`}
       </h1>
     ),
   },
@@ -77,12 +77,12 @@ export const pdfColumns = [
   {
     accessorKey: "Document_Type",
     header: "Document Type",
-    flex:0.8
+    flex: 0.8,
   },
   {
     accessorKey: "Document_No",
     header: "Document No",
-    flex:0.8
+    flex: 0.8,
   },
 
   {
