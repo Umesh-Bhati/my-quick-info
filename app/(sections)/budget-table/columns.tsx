@@ -26,7 +26,7 @@ const renderTableNumCell = (val: number, isBold?: string | boolean) => {
     >
       {val < 0
         ? `$ (${Number(val).toLocaleString().replace(/-/g, "")})`
-        : Number(val).toLocaleString()}
+        : `$ ${Number(val).toLocaleString()}`}
     </td>
   );
 };
