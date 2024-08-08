@@ -21,21 +21,13 @@ export type Budget = {
 const renderTableNumCell = (val: number, isBold?: string | boolean) => {
   if (+val === 0) return "";
   return (
-    <h1
-      className={`${!!isBold ? "font-bold text-[14.5px]" : "text-sm"} ${
-        +val !== 0
-          ? +val > 0
-            ? isBold
-              ? "text-green-600"
-              : "text-green-500"
-            : isBold
-            ? "text-red-600"
-            : "text-red-500"
-          : ""
-      } text-primary-forground  `}
+    <td
+      className={`${!!isBold ? "font-bold text-[14.5px]" : "text-sm"}`}
     >
-      {`$ ${Number(val).toLocaleString()}`}
-    </h1>
+      {val < 0
+        ? `$ (${Number(val).toLocaleString().replace(/-/g, "")})`
+        : Number(val).toLocaleString()}
+    </td>
   );
 };
 
@@ -173,11 +165,7 @@ export const pdfColumns: PDFColType[] = [
         +budget - +ytd - +openPurchOrd - +openReq
       );
       if (+val < 0)
-        return (
-          <Text style={{ color: "rgb(239, 68, 68)" }}>
-            {`$ ${Number(val).toLocaleString()}`}{" "}
-          </Text>
-        );
+        return <Text>{`$ (${Number(val).toLocaleString().replace(/-/g, "")})`} </Text>;
       return `$ ${Number(val).toLocaleString()}`;
     },
   },

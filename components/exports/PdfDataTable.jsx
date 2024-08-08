@@ -22,18 +22,13 @@ Footer.displayName = "Footer";
 const renderTableCell = (row, col, styles) => {
   const cellItem = row[col.accessorKey];
   const isAmtsNum = col.isAmtsNum;
-  const color = isAmtsNum
-    ? +cellItem > 0 || +row.total > 0
-      ? "rgb(34, 197, 94)"
-      : "rgb(239, 68, 68)"
-    : "#232b2b";
+
 
   if (col.accessorKey === "available") {
     const val = fixedDecimal(+row.budget - +row.ytd - +row.openPurchOrd - +row.openReq);
-    const availableColor = +val < 0 ? "rgb(239, 68, 68)" : "rgb(34, 197, 94)";
     return (
-      <Text style={[styles.tableCell, { color: availableColor }]}>
-        {`$ ${Number(val).toLocaleString()}`}
+      <Text style={[styles.tableCell]}>
+        {`$ ${+val < 0 ? "(" + Number(val).toLocaleString().replace(/-/g, "") + ")" : Number(val).toLocaleString()}`}
       </Text>
     );
   }
@@ -42,14 +37,14 @@ const renderTableCell = (row, col, styles) => {
 
   const textContent = row.desc
     ? col.showDescTitle ? `Total: ${row.desc}`
-      : col.showTotalAmt ? `$ ${Number(+cellItem || row.total).toLocaleString()}`
+      : col.showTotalAmt ? `$ ${(+cellItem || +row.total) < 0 ? "(" + Number(+cellItem || row.total).toLocaleString().replace(/-/g, "") + ")" : Number(+cellItem || row.total).toLocaleString()}`
         : ""
     : col.cell ? col.cell(row)
-      : isAmtsNum ? `$ ${Number(+cellItem).toLocaleString()}`
+      : +isAmtsNum ? `$ ${+cellItem < 0 ? "(" + Number(+cellItem).toLocaleString().replace(/-/g, "") + ")" : Number(+cellItem).toLocaleString()}`
         : cellItem;
 
   return (
-    <Text style={[styles.tableCell, { color: isAmtsNum ? color : "#0e1111" }]}>
+    <Text style={[styles.tableCell, { color: "#0e1111" }]}>
       {textContent}
     </Text>
   );

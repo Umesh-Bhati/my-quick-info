@@ -54,13 +54,13 @@ export const columns: ColumnDef<VendorType>[] = [
         original: { Amount },
       },
     }) => (
-      <h1
-        className={`${
-          +Amount !== 0 ? (+Amount > 0 ? "text-green-500" : "text-red-500") : ""
-        } text-primary-forground text-sm font-semiBold`}
-      >
-        {`$ ${Number(Amount).toLocaleString()}`}
-      </h1>
+      <td className={`text-sm font-semiBold`}>
+        {`$ ${
+          +Amount < 0
+            ? "(" + Number(Amount).toLocaleString().replace(/-/g, "") + ")"
+            : Number(Amount).toLocaleString()
+        }`}
+      </td>
     ),
   },
   {

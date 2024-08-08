@@ -62,25 +62,21 @@ export const columns: ColumnDef<GlDetail>[] = [
       },
     }) => {
       return desc ? (
-        <h1
-          className={`${
-            +total !== 0 ? (+total > 0 ? "text-green-600" : "text-red-600") : ""
-          } text-primary-forground text-sm font-semiBold`}
-        >
-          {`$ ${Number(total).toLocaleString()}`}
-        </h1>
+        <td className={`text-sm font-semibold`}>
+          {`$ ${
+            +total < 0
+              ? "(" + Number(total).toLocaleString().replace(/-/g, "") + ")"
+              : Number(total).toLocaleString()
+          }`}
+        </td>
       ) : (
-        <h1
-          className={`${
-            +Amount !== 0
-              ? +Amount > 0
-                ? "text-green-500"
-                : "text-red-500"
-              : " "
-          } text-primary-forground text-sm `}
-        >
-          {`$ ${Number(Amount).toLocaleString()}`}
-        </h1>
+        <td className={`text-sm`}>
+          {`$ ${
+            Amount < 0
+              ? "(" + Number(Amount).toLocaleString().replace(/-/g, "") + ")"
+              : Number(Amount).toLocaleString()
+          }`}
+        </td>
       );
     },
   },
