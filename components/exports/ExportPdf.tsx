@@ -11,7 +11,7 @@ export default function ExportPdf({
 }: any) {
   if (isGenerate)
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="w-full h-9 self-end  flex justify-center items-center">
         <PDFDownloadLink
           document={document}
           fileName={fileName}
