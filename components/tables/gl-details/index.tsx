@@ -7,6 +7,7 @@ export default function GlDetailsTable(rest: any) {
   return (
     <DataTable
       columns={columns}
+      whichTable="glDetails"
       {...rest}
       data={calTotalOfGlTable(
         rest.data,

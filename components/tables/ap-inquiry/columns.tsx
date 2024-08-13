@@ -33,7 +33,6 @@ export const columns: ColumnDef<VendorType>[] = [
     accessorKey: "Document_No",
     header: "Document No",
   },
-
   {
     accessorKey: "External_Document_No",
     header: "External Document No",
@@ -48,14 +47,14 @@ export const columns: ColumnDef<VendorType>[] = [
   },
   {
     accessorKey: "Amount",
-    header: "Amount",
+    header: "Amount($)",
     cell: ({
       row: {
         original: { Amount },
       },
     }) => (
-      <td className={`text-sm font-semiBold`}>
-        {`$ ${
+      <td className={`text-sm font-semiBold flex place-content-end`}>
+        {`${
           +Amount < 0
             ? "(" + Number(Amount).toLocaleString().replace(/-/g, "") + ")"
             : Number(Amount).toLocaleString()
@@ -102,7 +101,7 @@ export const pdfColumns = [
   },
   {
     accessorKey: "Amount",
-    header: "Amount",
+    header: "Amount($)",
     isAmtsNum: true,
     flex: 0.7,
   },

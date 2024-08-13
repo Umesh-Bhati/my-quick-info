@@ -17,7 +17,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "./skeleton";
-import { useCallback } from "react";
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -25,13 +24,35 @@ export interface DataTableProps<TData, TValue> {
   fetchNextPage: () => void;
   hasNextPage?: boolean;
   isFetchingNext?: boolean;
+  whichTable?: "budget" | "glDetails" | "apInquiry";
 }
+
+export const columnConfig: any = {
+  budget: {
+    mtd: { isAmt: true },
+    ytd: { isAmt: true },
+    openPurchOrd: { isAmt: true },
+    openReq: { isAmt: true },
+    budget: { isAmt: true },
+    total: { isAmt: true },
+    available:{isAmt: true}
+  },
+  glDetails: {
+    Amount: { isAmt: true },
+  },
+  apInquiry: {
+    Amount: {
+      isAmt: true,
+    },
+  },
+};
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   fetchNextPage,
   isFetchingNext,
+  whichTable,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -62,9 +83,15 @@ export function DataTable<TData, TValue>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow className="bg-muted" key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                const accerssorKey = header.id;
+                const { isAmt = false } = whichTable
+                  ? columnConfig[whichTable]?.[accerssorKey] || {}
+                  : {};
                 return (
                   <TableHead
-                    className="text-sm text-left min-w-20 font-bold"
+                    className={`${
+                      isAmt ? "text-right" : "text-center"
+                    } text-sm min-w-20 font-bold`}
                     key={header.id}
                   >
                     {header.isPlaceholder
@@ -89,7 +116,7 @@ export function DataTable<TData, TValue>({
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <TableCell
-                      className={`text-left min-w-48 border-r border`}
+                      className={`text-center min-w-48 border-r border`}
                       key={cell.id}
                     >
                       {flexRender(

@@ -27,8 +27,8 @@ const renderTableCell = (row, col, styles) => {
   if (col.accessorKey === "available") {
     const val = fixedDecimal(+row.budget - +row.ytd - +row.openPurchOrd - +row.openReq);
     return (
-      <Text style={[styles.tableCell]}>
-        {`$ ${+val < 0 ? "(" + Number(val).toLocaleString().replace(/-/g, "") + ")" : Number(val).toLocaleString()}`}
+      <Text style={[styles.tableCell, { textAlign: isAmtsNum ? 'right' : 'center' }]}>
+        {`${+val < 0 ? "(" + Number(val).toLocaleString().replace(/-/g, "") + ")" : Number(val).toLocaleString()}`}
       </Text>
     );
   }
@@ -37,14 +37,14 @@ const renderTableCell = (row, col, styles) => {
 
   const textContent = row.desc
     ? col.showDescTitle ? `Total: ${row.desc}`
-      : col.showTotalAmt ? `$ ${(+cellItem || +row.total) < 0 ? "(" + Number(+cellItem || row.total).toLocaleString().replace(/-/g, "") + ")" : Number(+cellItem || row.total).toLocaleString()}`
+      : col.showTotalAmt ? `${(+cellItem || +row.total) < 0 ? "(" + Number(+cellItem || row.total).toLocaleString().replace(/-/g, "") + ")" : Number(+cellItem || row.total).toLocaleString()}`
         : ""
     : col.cell ? col.cell(row)
-      : +isAmtsNum ? `$ ${+cellItem < 0 ? "(" + Number(+cellItem).toLocaleString().replace(/-/g, "") + ")" : Number(+cellItem).toLocaleString()}`
+      : isAmtsNum ? `${+cellItem < 0 ? "(" + Number(+cellItem).toLocaleString().replace(/-/g, "") + ")" : Number(+cellItem).toLocaleString()}`
         : cellItem;
 
   return (
-    <Text style={[styles.tableCell, { color: "#0e1111" }]}>
+    <Text style={[styles.tableCell, { textAlign: isAmtsNum ? 'right' : 'center' }]}>
       {textContent}
     </Text>
   );
@@ -70,7 +70,7 @@ const PdfDataTable = ({ columns, data, renderHeader, maxEntriesPerPage = 30 }) =
                     header.flex && { flex: header.flex },
                   ]}
                 >
-                  <Text style={styles.tableCellHeader}>{header.header}</Text>
+                  <Text style={[styles.tableCellHeader, { textAlign: header?.isAmtsNum ? "right" : 'center' }]}>{header.header}</Text>
                 </View>
               ))}
             </View>
@@ -163,5 +163,6 @@ const styles = StyleSheet.create({
     margin: 5,
     textAlignVertical: "center",
     color: "#0e1111",
+    textAlign: 'center'
   },
 });

@@ -55,23 +55,23 @@ export const columns: ColumnDef<GlDetail>[] = [
   },
   {
     accessorKey: "Amount",
-    header: "Amount",
+    header: "Amount($)",
     cell: ({
       row: {
         original: { total = 0, Amount, desc },
       },
     }) => {
       return desc ? (
-        <td className={`text-sm font-semibold`}>
-          {`$ ${
+        <td className={`text-sm font-semibold flex place-content-end`}>
+          {`${
             +total < 0
               ? "(" + Number(total).toLocaleString().replace(/-/g, "") + ")"
               : Number(total).toLocaleString()
           }`}
         </td>
       ) : (
-        <td className={`text-sm`}>
-          {`$ ${
+        <td className={`text-sm flex place-content-end`}>
+          {`${
             Amount < 0
               ? "(" + Number(Amount).toLocaleString().replace(/-/g, "") + ")"
               : Number(Amount).toLocaleString()
@@ -117,7 +117,7 @@ export const pdfColumns = [
   },
   {
     accessorKey: "Amount",
-    header: "Amount",
+    header: "Amount($)",
     isAmtsNum: true,
     showTotalAmt: true,
   },
